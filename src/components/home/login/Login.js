@@ -2,27 +2,69 @@ import React from 'react'
 
 import styled from 'styled-components';
 
+import { firebaseInstance, authService, storeService } from 'fb/f'
+
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai'
 
 function Login() {
+  async function onSocialClick(name) {
+    let provider;
+
+    if (name === "google") {
+      provider = new firebaseInstance.auth.GoogleAuthProvider();
+    } else if (name === "github") {
+      provider = new firebaseInstance.auth.GithubAuthProvider();
+    } else if (name === "facebook") {
+      provider = new firebaseInstance.auth.FacebookAuthProvider();
+    }
+
+    var data;
+    await firebaseInstance.auth().signInWithPopup(provider).then((result) => {
+      data = result;
+    }).catch(function (error) {
+      alert(error.message); window.location.reload();
+    });
+
+    if(data.additionalUserInfo.isNewUser) {
+      await storeService.collection("users").doc(data.user.uid).set({
+        name : data.user.displayName,
+        image : data.user.photoURL,
+        joinDate : Date.now(),
+        level : 0,
+        point : 0
+      });
+    }   
+    
+    await storeService.collection("users").doc(data.user.uid).update({
+      lastLoginDate : Date.now(),
+    });
+
+  }
+
   return (
     <Container id='login_frame'>
       <Box>
         <Title>로그인</Title>
 
         <div style={{paddingTop:'20px'}}>
-          <LoginButton borderColor='#cfcfcf'>
+          <LoginButton 
+            onClick={() => onSocialClick('google')}
+            borderColor='#cfcfcf'>
             <Icon><FcGoogle size='24' /></Icon>
             <Text>구글 로그인</Text>
           </LoginButton>
 
-          <LoginButton bgColor='#000' color='#fff'>
+          <LoginButton
+            onClick={() => onSocialClick('github')}
+            bgColor='#000' color='#fff'>
             <Icon><AiFillGithub size='24'/></Icon>
             <Text>깃허브 로그인</Text>
           </LoginButton>
 
-          <LoginButton bgColor='#3b5998' color='#fff'>
+          <LoginButton 
+            onClick={() => onSocialClick('facebook')}
+            bgColor='#3b5998' color='#fff'>
             <Icon><AiFillFacebook size='24'/></Icon>
             <Text>페이스북 로그인</Text>
           </LoginButton>
