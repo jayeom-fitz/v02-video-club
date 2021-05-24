@@ -2,7 +2,7 @@ import React from 'react'
 
 import styled from 'styled-components';
 
-import { firebaseInstance, authService, storeService } from 'fb/f'
+import { firebaseInstance, storeService } from 'fb/f'
 
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai'
@@ -39,7 +39,6 @@ function Login() {
     await storeService.collection("users").doc(data.user.uid).update({
       lastLoginDate : Date.now(),
     });
-
   }
 
   return (
