@@ -1,12 +1,29 @@
 import React from 'react'
 
 import styled from 'styled-components';
-import HeaderLeft from './HeaderLeft';
 
-function Header() {
+import { FiMenu } from 'react-icons/fi' 
+
+import Logo from './content/Logo';
+
+import UserIcon from './content/UserIcon';
+import LoginButton from './content/LoginButton';
+
+function Header(props) {
   return (
     <Container>
-      <HeaderLeft />
+      <Content>
+        <FiMenuIcon 
+          // onClick={() => {
+          //   document.getElementById("vc-sidebar").style.left = "0px";
+          // }} 
+          size='24' />
+        <Logo />
+      </Content>
+      
+      <Content>
+        {props.user ? <UserIcon user={props.user}/> : <LoginButton />}
+      </Content>
     </Container>
   )
 }
@@ -22,4 +39,15 @@ const Container = styled.div`
   top: 0;
   z-index: 100;
   background-color: white;
+`
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+`
+const FiMenuIcon = styled(FiMenu)`
+  cursor: pointer;
+
+  &:hover {
+    color: red;
+  }
 `

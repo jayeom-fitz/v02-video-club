@@ -42,7 +42,7 @@ function Login() {
   }
 
   return (
-    <Container id='login_frame'>
+    <Container id='vc_login_frame'>
       <Box>
         <Title>로그인</Title>
 
@@ -69,7 +69,7 @@ function Login() {
           </LoginButton>
         </div>
 
-        <CancleButton onClick={() => document.getElementById('login_frame').style.display = 'none'}>
+        <CancleButton onClick={() => document.getElementById('vc_login_frame').style.display = 'none'}>
           <Text style={{width:'100%'}}>취소</Text>
         </CancleButton>
       </Box>
