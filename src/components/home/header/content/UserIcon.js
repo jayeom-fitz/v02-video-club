@@ -21,6 +21,7 @@ function UserIcon(props) {
   const onLinkClick = () => {
     const ref = document.getElementById("vc_userIcon_dropdown");
 
+    if(ref === null) return;
     ref.style.display='none';
   }
 

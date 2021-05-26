@@ -14,9 +14,9 @@ function Header(props) {
     <Container>
       <Content>
         <FiMenuIcon 
-          // onClick={() => {
-          //   document.getElementById("vc-sidebar").style.left = "0px";
-          // }} 
+          onClick={() => {
+            document.getElementById("vc_sidebar").style.left = "0px";
+          }} 
           size='24' />
         <Logo />
       </Content>

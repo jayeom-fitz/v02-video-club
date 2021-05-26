@@ -2,6 +2,7 @@ import React from 'react'
 
 import Header from 'components/home/header/Header'
 import Login from 'components/home/login/Login'
+import Sidebar from 'components/home/sidebar/Sidebar'
 
 function Home(props) {
   return (
@@ -11,6 +12,8 @@ function Home(props) {
       {props.user ? null : <Login />} 
 
       <div style={{display: 'flex'}}>
+        <Sidebar />
+
         Home
       </div>
     </div>
@@ -18,3 +21,5 @@ function Home(props) {
 }
 
 export default Home
+
+// #f70d1a
