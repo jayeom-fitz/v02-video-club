@@ -19,6 +19,8 @@ function Sidebar() {
       {SidebarData.map((item, index) => {
         return <SidebarRow item={item} key={index} />;
       })}
+
+      <Line />
     </Container>
   )
 }

@@ -34,10 +34,18 @@ function UserIcon(props) {
       />
 
       <Dropdown id="vc_userIcon_dropdown">
+        {props.user.level >= 4 &&
+          <Link 
+            to={`/admin`} style={{textDecoration:'none'}}
+            onClick={onLinkClick()}>
+            <Content>관리자 페이지</Content>
+          </Link>
+        }
+
         <Link 
           to={`/`} style={{textDecoration:'none'}}
           onClick={onLinkClick()}>
-          <Content className="userIcon__content">내 정보</Content>
+          <Content>내 정보</Content>
         </Link>
 
         <Content
