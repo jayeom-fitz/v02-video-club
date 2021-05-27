@@ -34,7 +34,7 @@ function UserIcon(props) {
       />
 
       <Dropdown id="vc_userIcon_dropdown">
-        {props.user.level >= 4 &&
+        {props.user.level > 0 &&
           <Link 
             to={`/admin`} style={{textDecoration:'none'}}
             onClick={onLinkClick()}>

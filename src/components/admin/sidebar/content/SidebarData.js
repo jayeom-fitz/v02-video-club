@@ -1,5 +1,3 @@
-import  { AiFillHome, AiFillFire, AiFillNotification } from 'react-icons/ai';
-
 export const SidebarData = [
   {
     title: '유저 관리',
@@ -7,15 +5,15 @@ export const SidebarData = [
     subNav: [
       {
         title: '관리자',
-        path: '#'
-      },
-      {
-        title: '인증 유저',
-        path: '#'
+        path: '/admin/administrators'
       },
       {
         title: '일반 유저',
-        path: '#'
+        path: '/admin/users'
+      },
+      {
+        title: '정지 유저',
+        path: '/admin/ban_users'
       }
     ]
   },
