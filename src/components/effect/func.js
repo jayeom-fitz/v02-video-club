@@ -38,11 +38,11 @@ exports.dateToString2 = function (time) {
   }
 }
 
-exports.viewsToString = function (views) {
-  views = parseInt(views);
-  var v = views % 1000; views = parseInt(views/1000);
-  for(;views !== 0; views = parseInt(views/1000)) {
-    v = views % 1000 + ',' + v;
+exports.numberToString = function (number) {
+  number = parseInt(number);
+  var v = number % 1000; number = parseInt(number/1000);
+  for(;number !== 0; number = parseInt(number/1000)) {
+    v = number % 1000 + ',' + v;
   }
-  return '조회수 : ' + v + '회';
+  return v;
 }

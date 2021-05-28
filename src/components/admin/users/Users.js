@@ -7,8 +7,8 @@ import Avatar from "@material-ui/core/Avatar";
 import Loading from 'components/effect/Loading';
 
 import { dateToString } from 'components/effect/func';
-import { getUsersByLevel } from 'fb/users/get';
 
+import { getUsersByLevel, getUsersByLevelAndName } from 'fb/users/get';
 
 function Users() {
   const { startComponent } = useParams();
@@ -39,6 +39,22 @@ function Users() {
     getUsers();
   }, [startComponent])
 
+  const nameSearch = async () => {
+    var array = []; var level;
+
+    switch(startComponent) {
+      case 'administrators': 
+        level = 1; setTitle('관리자'); break;
+      case 'users' : 
+        level = 0; setTitle('유저'); break;
+      default : 
+        level = -1; setTitle('정지 유저'); break;
+    }
+
+    array = await getUsersByLevelAndName(level > 0 ? '>=' : '==', level, search);
+    
+    setUsers(array);
+  }
 
   return (
     <div style={{width:'100%'}}>
@@ -47,7 +63,10 @@ function Users() {
           <Title>{title} 관리</Title>
           
           <div>
-            <Input value={search} placeholder='이름 검색' onChange={(e) => setSearch(e.target.value)}/>
+            <div>
+              <Input value={search} placeholder='이름 검색' onChange={(e) => setSearch(e.target.value)}/>
+              <SearchButton onClick={nameSearch}>검색</SearchButton>
+            </div>
             
             <div style={{paddingTop:'20px'}}>
               <Line top='true'>
@@ -57,7 +76,7 @@ function Users() {
                 <Column flex='0.2'>최근 로그인</Column>
                 <Column flex='0.2'>가입일</Column>
               </Line>
-              {users.length != 0 ? users.map((user) => 
+              {users.length !== 0 ? users.map((user) => 
                 <StyledLink key={user.id} to={`/admin/user/${user.id}`}>
                   <Line>
                     <Column flex='0.1'>
@@ -74,7 +93,7 @@ function Users() {
             </div>
           </div>
         </Container>
-      </> : <Loading />}
+      </> : <Loading size='72'/>}
     </div>
   )
 }
@@ -94,6 +113,18 @@ const Input = styled.input`
   border-bottom: 1px solid lightgrey;
   &:focus {
     outline: 2px solid #3CAEA3
+  }
+`
+const SearchButton = styled.button`
+  padding: 10px 20px;
+  margin-left: 10px;
+  color: #f70d1a;
+  border: 1px solid #f70d1a;
+  background-color: white;
+
+  &:hover {
+    color: white;
+    background-color: #f70d1a;
   }
 `
 const Line = styled.div`

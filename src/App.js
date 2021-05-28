@@ -6,7 +6,7 @@ import firebase from 'firebase'
 import { storeService } from 'fb/f'
 
 function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [userObj, setUserObj] = useState(firebase.auth().currentUser);
 
   useEffect(() => {
@@ -23,13 +23,13 @@ function App() {
       if(user) {
         getUserInfo(user);
       } 
-      setIsLoaded(true);
+      setLoaded(true);
     });
   }, []);
   
   return (
     <>
-      {isLoaded ? <AppRouter user={userObj}/> : null}
+      {loaded ? <AppRouter user={userObj}/> : null}
     </>
   );
 }

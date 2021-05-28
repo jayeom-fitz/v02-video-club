@@ -20,7 +20,8 @@ function Admin(props) {
       case 'administrators':
       case 'users' :
       case 'ban_users' : return <Users />
-      case 'user' : return <User />    
+      case 'user' : return <User user={props.user} />   
+       
       default : return <Main user={props.user} />
     }
   }
