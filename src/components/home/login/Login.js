@@ -6,6 +6,8 @@ import { firebaseInstance, storeService } from 'fb/f'
 
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai'
+import { getUserCount } from 'fb/main/get';
+import { userCountUp } from 'fb/main/set';
 
 function Login() {
   async function onSocialClick(name) {
@@ -27,13 +29,15 @@ function Login() {
     });
 
     if(data.additionalUserInfo.isNewUser) {
+      var count = await getUserCount();
       await storeService.collection("users").doc(data.user.uid).set({
-        name : data.user.displayName,
+        name : `NewUser${count}`,
         image : data.user.photoURL,
         joinDate : Date.now(),
         level : 0,
         point : 0
       });
+      await userCountUp();
     }   
     
     await storeService.collection("users").doc(data.user.uid).update({

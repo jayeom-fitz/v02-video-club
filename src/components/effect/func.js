@@ -1,3 +1,5 @@
+const { isPossibleName } = require("fb/main/get");
+
 exports.dateToString = function (time) {
   var date = new Date(time).toString().split(' ');
   var month;
@@ -45,4 +47,14 @@ exports.numberToString = function (number) {
     v = number % 1000 + ',' + v;
   }
   return v;
+}
+
+exports.userNameFilter = async function (name) {
+  var check = await isPossibleName(name);
+
+  if(check) return true;
+
+  if(name.length < 1 || name.length > 16) return true;
+
+  return false;
 }

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import Avatar from "@material-ui/core/Avatar";
 import Loading from 'components/effect/Loading';
 
-import { dateToString, dateToString2, numberToString } from 'components/effect/func';
+import { dateToString, dateToString2, numberToString, userNameFilter } from 'components/effect/func';
 
 import { getUserById, isDuplicatedByName } from 'fb/users/get';
 
@@ -46,6 +46,19 @@ function User(props) {
 
   const onSubmit = async () => {
     var checkId = await isDuplicatedByName(name);
+
+    if(!(checkId === undefined || checkId === id)) {
+      alert('중복된 닉네임 입니다.');
+      document.getElementById('vc_user_name').focus();
+      return;
+    }
+
+    var check = await userNameFilter(name); 
+    if(check) {
+      alert('잘못된 닉네임 입니다.');
+      document.getElementById('vc_user_name').focus();
+      return;
+    }
 
     // var ban = 0;
     
@@ -94,7 +107,7 @@ function User(props) {
 
               <InputBox>
                 <Text>닉네임</Text>
-                <Input value={name} onChange={(v) => setName(v.target.value)}/>
+                <Input id='vc_user_name' value={name} onChange={(v) => setName(v.target.value)}/>
               </InputBox>
 
               <InputBox>
