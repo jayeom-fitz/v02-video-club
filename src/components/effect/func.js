@@ -58,3 +58,13 @@ exports.userNameFilter = async function (name) {
 
   return false;
 }
+
+exports.dateToMilis = function ({now, year, month, date}) {
+  var t = 1000 * 60 * 60 * 24;
+
+  now += date * t; t *= 30;
+  now += month * t; t *= 12;
+  now += year * t;
+
+  return now;
+}

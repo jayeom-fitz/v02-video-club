@@ -6,9 +6,12 @@ import styled from 'styled-components'
 import Avatar from "@material-ui/core/Avatar";
 import Loading from 'components/effect/Loading';
 
-import { dateToString, dateToString2, numberToString, userNameFilter } from 'components/effect/func';
+import { dateToString, dateToString2
+      , numberToString, userNameFilter
+      , dateToMilis } from 'components/effect/func';
 
 import { getUserById, isDuplicatedByName } from 'fb/users/get';
+import { setUserData } from 'fb/users/set';
 
 function User(props) {
   const { id } = useParams();
@@ -27,6 +30,10 @@ function User(props) {
   const [banDate, setBanDate] = useState(0);
   const [releaseDate, setReleaseDate] = useState(0);
 
+  const [year, setYear] = useState(0);
+  const [month, setMonth] = useState(0);
+  const [date, setDate] = useState(0);
+
   async function getUserData() {
     var user = await getUserById(id);
 
@@ -36,6 +43,7 @@ function User(props) {
 
     if(user.banReason !== undefined) setBanReason(user.banReason);
     if(user.banDate !== undefined) setBanDate(user.banDate);
+    if(user.releaseDate !== undefined) setReleaseDate(user.releaseDate);
 
     setLoaded(true);
   }
@@ -60,16 +68,18 @@ function User(props) {
       return;
     }
 
-    // var ban = 0;
-    
-    // if(verified === -1 && banDate === 0) ban = Date.now();
+    var ban = 0; var rel = 0;
+    if(level === -1 && banDate === 0) {
+      ban = Date.now();
+      rel = dateToMilis({now : ban, year, month, date})
+    }
 
-    // await storeService.collection('users').doc(id).update({
-    //   nickname, photoURL, verified, banReason, banDate : ban
-    // });
+    await setUserData(id, {
+      name, image, level, point, banDate : ban, banReason, releaseDate : rel
+    });
     
-    // setBanDate(ban);
-    // alert('수정되었습니다.')
+    setBanDate(ban); setReleaseDate(rel);
+    alert('수정되었습니다.')
   }
 
   return (
@@ -143,14 +153,15 @@ function User(props) {
                   </InputBox>
 
                   <InputBox>
-                    <Number type='number' />
+                    <Number type='number' value={year} onChange={(e) => setYear(e.target.value)} />
                     <NumberString> 년 </NumberString>
-                    <Number type='number' />
+                    <Number type='number' value={month} onChange={(e) => setMonth(e.target.value)} />
                     <NumberString>개월</NumberString>
-                    <Number type='number' />
+                    <Number type='number' value={date} onChange={(e) => setDate(e.target.value)} />
                     <NumberString> 일 </NumberString>
                   </InputBox>
                 </>}
+
                 {banDate > 0 && <>
                   <InputBox>
                     <Text>정지일자</Text>
@@ -237,7 +248,7 @@ const Button = styled.button`
   }
 `
 const Number = styled.input`
-  flex: 0.1;
+  width: 100px;
   height: 30px;
   margin: 10px 0;
   padding-left: 5px;
