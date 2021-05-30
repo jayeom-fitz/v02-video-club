@@ -45,7 +45,7 @@ function Write(props) {
     } else {
       writeBoardPosting({
         board: code,
-        title, content: str, registDate: Date.now(), active: true,
+        title, content: str, registDate: Date.now(), active: true, views: 0, ups: 0,
         pid: props.user.uid, pname: props.user.name, pimage: props.user.image,
       })
       alert('작성이 완료되었습니다.');
