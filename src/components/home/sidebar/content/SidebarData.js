@@ -8,7 +8,7 @@ export const SidebarData = [
   },
   {
     title: '공지',
-    path: '/',
+    path: '/notice',
     icon: AiFillNotification
   },  
   {
