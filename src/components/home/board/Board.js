@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import Avatar from "@material-ui/core/Avatar";
 import Loading from 'components/effect/Loading';
 
-import { dateToString2 } from 'components/effect/func';
+import { dateToString2 } from 'components/effect/function/func_time';
 
 function Board(props) {
   const { pageName } = useParams();

@@ -6,6 +6,7 @@ import { firebaseInstance, storeService } from 'fb/f'
 
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai'
+
 import { getUserCount } from 'fb/main/get';
 import { userCountUp } from 'fb/main/set';
 
@@ -91,9 +92,10 @@ const Container = styled.div`
   top: 50%;
   left: 50%;
   margin:-200px 0 0 -150px;
+  background-color: white;
   border-radius: 10px;
   box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px, 3px 3px 5px grey;
-  z-index: 500;
+  z-index: 200;
 `
 const Box = styled.div`
   width: 100%;

@@ -7,8 +7,9 @@ import Avatar from "@material-ui/core/Avatar";
 import Loading from 'components/effect/Loading';
 
 import { dateToString, dateToString2
-      , numberToString, userNameFilter
-      , dateToMilis } from 'components/effect/func';
+      , dateToMilis } from 'components/effect/function/func_time';
+import { userNameFilter } from 'components/effect/function/func_db';
+import { numberToString } from 'components/effect/function/func_num';
 
 import { getUserById, isDuplicatedByName } from 'fb/users/get';
 import { setUserData } from 'fb/users/set';

@@ -7,7 +7,7 @@ import { authService, storeService } from 'fb/f'
 
 import { setUserRelease } from 'fb/users/set'
 
-import { dateToString } from 'components/effect/func';
+import { dateToString } from 'components/effect/function/func_time';
 
 function App() {
   const [loaded, setLoaded] = useState(false);

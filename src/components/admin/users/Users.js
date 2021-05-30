@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import Avatar from "@material-ui/core/Avatar";
 import Loading from 'components/effect/Loading';
 
-import { dateToString } from 'components/effect/func';
+import { dateToString } from 'components/effect/function/func_time';
 
 import { getUsersByLevel, getUsersByLevelAndName } from 'fb/users/get';
 

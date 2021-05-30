@@ -1,5 +1,3 @@
-const { isPossibleName } = require("fb/main/get");
-
 exports.dateToString = function (time) {
   var date = new Date(time).toString().split(' ');
   var month;
@@ -38,25 +36,6 @@ exports.dateToString2 = function (time) {
   } else {
     return Math.floor(gap / (1000 * 60 * 60 * 24 * 7 * 4 * 12)) + ' 년 전';
   }
-}
-
-exports.numberToString = function (number) {
-  number = parseInt(number);
-  var v = number % 1000; number = parseInt(number/1000);
-  for(;number !== 0; number = parseInt(number/1000)) {
-    v = number % 1000 + ',' + v;
-  }
-  return v;
-}
-
-exports.userNameFilter = async function (name) {
-  var check = await isPossibleName(name);
-
-  if(check) return true;
-
-  if(name.length < 1 || name.length > 16) return true;
-
-  return false;
 }
 
 exports.dateToMilis = function ({now, year, month, date}) {

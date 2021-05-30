@@ -14,7 +14,8 @@ function AppRouter(props) {
         <Route exact path="/admin/" ><Admin user={props.user} /></Route>
         <Route path="/admin/:startComponent/:id" ><Admin user={props.user} /></Route>
         <Route path="/admin/:startComponent" ><Admin user={props.user} /></Route>
-        
+
+        <Route path="/:pageName/:code" ><Home user={props.user} /></Route>
         <Route path="/:pageName" ><Home user={props.user} /></Route>
       </Switch>
     </Router>
