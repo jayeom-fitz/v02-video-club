@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 
 import styled, { css } from 'styled-components'
 
@@ -8,8 +8,9 @@ import { lineFeedEncoding } from 'components/effect/function/func_str';
 import { writeBoardPosting } from 'fb/board/set';
 
 function Write(props) {
-  const { code } = useParams();
-
+  const { property1 } = useParams();
+  const history = useHistory();
+ 
   const [loaded, setLoaded] = useState(false);
   
   const [title, setTitle] = useState('');
@@ -44,14 +45,14 @@ function Write(props) {
       alert('수정이 완료되었습니다.');
     } else {
       writeBoardPosting({
-        board: code,
+        board: property1,
         title, content: str, registDate: Date.now(), active: true, views: 0, ups: 0,
         pid: props.user.uid, pname: props.user.name, pimage: props.user.image,
       })
       alert('작성이 완료되었습니다.');
     }
 
-    window.history.back();
+    history.push({ pathname: `/${property1}` })
   }
 
   return (

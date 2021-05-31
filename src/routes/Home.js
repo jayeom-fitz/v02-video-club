@@ -6,15 +6,14 @@ import Login from 'components/home/login/Login'
 import Sidebar from 'components/home/sidebar/Sidebar'
 
 import Board from 'components/home/board/Board';
-import Write from 'components/home/board/Write';
 
 function Home(props) {
   const { pageName } = useParams();
 
   const switchComponent = (prop) => {
     switch(prop) {
-      case 'notice': return <Board user={props.user} />
-      case 'write': return <Write user={props.user} /> 
+      case 'board': return <Board user={props.user} />
+
       default : return null;
     }
   }
