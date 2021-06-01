@@ -15,3 +15,14 @@ export async function getPostingsByBoardName(board) {
   
   return data;
 }
+
+export async function getPostingById(id) {
+  var data;
+
+  await storeService.collection('board').doc(id)
+    .get().then(function (doc) {
+      data = { ...doc.data() }
+    })
+  
+  return data;
+}

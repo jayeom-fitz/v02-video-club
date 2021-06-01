@@ -36,3 +36,6 @@ function Home(props) {
 export default Home
 
 // #f70d1a ferrari red
+// #ffa6c9 carnation
+
+// #0f52ba sapphire

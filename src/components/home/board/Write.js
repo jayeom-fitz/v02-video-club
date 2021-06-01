@@ -20,7 +20,11 @@ function Write(props) {
     if(!props.user) {
       alert('로그인 후 이용바랍니다.');
       window.history.back();
-    }else if(!props.edit) {
+    }
+    
+    if(!props.edit) {
+
+    } else {
 
     }
 
@@ -47,12 +51,13 @@ function Write(props) {
       writeBoardPosting({
         board: property1,
         title, content: str, registDate: Date.now(), active: true, views: 0, ups: 0,
-        pid: props.user.uid, pname: props.user.name, pimage: props.user.image,
+        pid: props.user.uid, pname: props.user.name, pimage: props.user.image, 
+        plevel: props.user.level
       })
       alert('작성이 완료되었습니다.');
     }
 
-    history.push({ pathname: `/${property1}` })
+    history.push({ pathname: `/board/${property1}` })
   }
 
   return (
@@ -80,7 +85,7 @@ function Write(props) {
                 작성
               </Button>
             }
-            <Button color='#CC0000' onClick={() => window.history.back()}>
+            <Button color='#CC0000' onClick={() => history.push({ pathname: `/board/${property1}` })}>
               취소
             </Button>
           </div>
