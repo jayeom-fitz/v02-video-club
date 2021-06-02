@@ -1,31 +1,49 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation  } from "react-router-dom";
 
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { lineFeedEncoding } from 'components/effect/function/func_str';
+import { lineFeedDecoding, lineFeedEncoding } from 'components/effect/function/func_str';
 
-import { writeBoardPosting } from 'fb/board/set';
+import { writeBoardPosting, updateBoardPosting } from 'fb/board/set';
+import { getPostingById } from 'fb/board/get';
+import Loading from 'components/effect/Loading';
 
 function Write(props) {
   const { property1 } = useParams();
   const history = useHistory();
+
+  const location = useLocation();
  
   const [loaded, setLoaded] = useState(false);
   
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
+  function goBack(sel) {
+    if(sel === 1) {
+      history.push({ pathname: `/board/${property1}/${location.state.id}` })
+    } else {
+      history.push({ pathname: `/board/${property1}` })
+    }
+  }
+
   async function init() {
     if(!props.user) {
-      alert('로그인 후 이용바랍니다.');
-      window.history.back();
+      alert('로그인 후 이용바랍니다.'); goBack(0);      
     }
     
     if(!props.edit) {
-
+      
     } else {
-
+      var data = await getPostingById(location.state.id);
+    
+      if(data.pid === null || data.pid === undefined) {
+        alert('잘못된 경로입니다.'); goBack(0); return;
+      }
+  
+      data.content = lineFeedDecoding(data.content);
+      setTitle(data.title); setContent(data.content);
     }
 
     setLoaded(true);
@@ -45,10 +63,12 @@ function Write(props) {
     const str = lineFeedEncoding(content);
 
     if(props.edit) {
-
+      await updateBoardPosting(location.state.id, {
+        title, content: str
+      });
       alert('수정이 완료되었습니다.');
     } else {
-      writeBoardPosting({
+      await writeBoardPosting({
         board: property1,
         title, content: str, registDate: Date.now(), active: true, views: 0, ups: 0,
         pid: props.user.uid, pname: props.user.name, pimage: props.user.image, 
@@ -57,40 +77,42 @@ function Write(props) {
       alert('작성이 완료되었습니다.');
     }
 
-    history.push({ pathname: `/board/${property1}` })
+    goBack(0);
   }
 
   return (
     <Container>
-      <Title>글쓰기</Title>
+      {loaded ? <>
+        <Title>{props.edit ? '글 수정': '글 쓰기'}</Title>
 
-      <BoxContainer>
-        <InputBox>
-          <Text>제목</Text>
-          <Input id='vc_title' value={title} onChange={(e) => setTitle(e.target.value)}/>
-        </InputBox>
+        <BoxContainer>
+          <InputBox>
+            <Text>제목</Text>
+            <Input id='vc_title' value={title} onChange={(e) => setTitle(e.target.value)}/>
+          </InputBox>
 
-        <InputBox>
-          <Text>내용</Text>
-          <Textarea id='vc_content' value={content} onChange={(e) => setContent(e.target.value)}/>
-        </InputBox>
+          <InputBox>
+            <Text>내용</Text>
+            <Textarea id='vc_content' value={content} onChange={(e) => setContent(e.target.value)}/>
+          </InputBox>
 
-        <InputBox>
-          <div style={{width:'100%', textAlign:'center'}}>
-            {props.edit ?
-              <Button color='#0099CC' onClick={() => onSubmit()} >
-                수정
-              </Button> :
-              <Button color='#007E33' onClick={() => onSubmit()}>
-                작성
+          <InputBox>
+            <div style={{width:'100%', textAlign:'center'}}>
+              {props.edit ?
+                <Button color='#0099CC' onClick={() => onSubmit()} >
+                  수정
+                </Button> :
+                <Button color='#007E33' onClick={() => onSubmit()}>
+                  작성
+                </Button>
+              }
+              <Button color='#CC0000' onClick={() => goBack(props.edit ? 1 : 0)}>
+                취소
               </Button>
-            }
-            <Button color='#CC0000' onClick={() => history.push({ pathname: `/board/${property1}` })}>
-              취소
-            </Button>
-          </div>
-        </InputBox>
-      </BoxContainer>
+            </div>
+          </InputBox>
+        </BoxContainer>
+      </> : <Loading size='72'/>}
     </Container>
   )
 }

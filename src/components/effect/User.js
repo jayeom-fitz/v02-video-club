@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Avatar from "@material-ui/core/Avatar";
 
 function User(props) {
-console.log(props);
   return (
     <StyledLink to={`/`}>
       <Container>

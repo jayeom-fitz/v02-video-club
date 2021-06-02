@@ -11,3 +11,8 @@ export async function updateBoardPosting(id, data) {
   await storeService.collection('board').doc(id)
     .update({ ...data });
 }
+
+export async function deleteBoardPosting(id) {
+  await storeService.collection('board').doc(id)
+    .update({active : false});
+}

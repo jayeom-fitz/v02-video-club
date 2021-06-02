@@ -4,6 +4,10 @@ import { useParams, Link, useHistory } from "react-router-dom";
 import styled, { css } from 'styled-components'
 
 import { getPostingById } from 'fb/board/get';
+import { deleteBoardPosting } from 'fb/board/set';
+
+import { lineFeedDecoding } from 'components/effect/function/func_str'
+import { dateToString } from 'components/effect/function/func_time';
 
 import Loading from 'components/effect/Loading';
 import User from 'components/effect/User';
@@ -17,7 +21,14 @@ function Read(props) {
 
   async function getBoardData() {
     var data = await getPostingById(property2);
+    
+    if(data.pid === null || data.pid === undefined) {
+      alert('잘못된 경로입니다.')
+      history.push({ pathname: `/board/${property1}` });
+      return;
+    }
 
+    data.content = lineFeedDecoding(data.content);
     setBoard(data);
   }  
 
@@ -30,26 +41,63 @@ function Read(props) {
     init();
   }, [property2])
 
+  async function deletePosting() {
+    await deleteBoardPosting(property2);
+    alert('게시글이 삭제되었습니다.')
+    history.push({ pathname: `/board/${property1}` });
+  }
+
   return (
     <Container>
-      {loaded ? <>
+      {loaded ? board.active ? <>
         <BoxContainer>
           <Box>
             <Text>작성자</Text>
-            <User pimage={board.pimage} pname={board.pname} plevel={board.plevel}/>
+            <Content>
+              <User 
+                pimage={board.pimage} 
+                pname={board.pname} 
+                plevel={board.plevel}/>
+            </Content>
+          </Box>
+
+          <Box>
+            <Text>작성일</Text>
+            <Content>
+              {dateToString(board.registDate)}
+            </Content>
           </Box>
 
           <Box>
             <Text>제목</Text>
-            <span>{board.title}</span>
+            <Title>
+              <span>{board.title}</span>
+            </Title>
           </Box>
 
           <Box>
             <Text>내용</Text>
-            <p>{board.content}</p>
+            <Pre>{board.content}</Pre>
           </Box>
+
+          {props.user && (props.user.uid === board.pid || props.user.level >= 1) &&
+            <div style={{width:'100%', textAlign:'center', padding:'20px'}}> 
+              <Button 
+                color='#0f52ba'
+                onClick={() => history.push({
+                  pathname: `/board/${property1}/edit`,
+                  state: {id : property2},
+                })}
+              >수정</Button>
+
+              <Button 
+                color='#f70d1a'
+                onClick={() => deletePosting()}
+              >삭제</Button>
+            </div>
+          }
         </BoxContainer>
-      </> : <Loading size='72' />}
+      </> : '삭제된 글입니다' : <Loading size='72' />}
     </Container>
   )
 }
@@ -80,25 +128,35 @@ const Text = styled.h4`
   text-align: center;
   margin: 15px 0;
 `
-const Input = styled.input`
+const Content = styled.div`
   flex: 0.8;
-  height: 30px;
-  margin: 5px 0;
-  padding: 0 10px;
-  border: 1px solid grey;
-
-  &:focus {
-    outline: 2px solid #f70d1a;
-  }
-`
-const Textarea = styled.textarea`
-  flex: 0.8;
-  height: 200px;
-  resize: none;
   padding: 10px;
-  border: 1px solid grey;
+  margin: 0 20px;
+`
+const Title = styled.div`
+  flex: 0.8;
+  padding: 10px;
+  margin: 0 20px;
+  border-bottom: 1px solid lightgrey;
+`
+const Pre = styled.pre`
+  flex: 0.8;
+  padding: 10px;
+  margin: 0 20px;
+  border: 1px solid lightgrey;
+`
+const Button = styled.button`
+  width: 80px;
+  height: 60px;
+  margin: 0 10px;
+  font-size: 1rem;
+  background-color: ${(props) => `${props.color}` || 'black'};
+  border: 1px solid ${(props) => `${props.color}` || 'black'};
+  transition: 0.3s;
+  color: white;
 
-  &:focus {
-    outline: 2px solid #f70d1a;
+  &:hover {
+    color: ${(props) => `${props.color}` || 'black'};
+    background-color: white;
   }
 `

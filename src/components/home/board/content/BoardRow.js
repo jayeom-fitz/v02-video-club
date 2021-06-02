@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 
 import styled from 'styled-components'
 
-import Avatar from "@material-ui/core/Avatar";
-
 import { dateToString2 } from 'components/effect/function/func_time';
+
 import User from 'components/effect/User';
 
 function BoardRow(props) {
@@ -58,11 +57,4 @@ const Line = styled.div`
 const Column = styled.div`
   flex: ${(props) => props.flex || '0.1'};
   text-align: center;
-`
-const StyledAvatar = styled(Avatar)`
-  width: 30px !important;
-  height: 30px !important;
-  margin: auto 10px;
-  border: 1px solid lightgrey;
-  float: right;
 `

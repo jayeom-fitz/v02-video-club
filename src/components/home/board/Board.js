@@ -6,9 +6,7 @@ import Read from './Read';
 import Write from './Write';
 
 function Board(props) {
-  const { property1, property2 } = useParams();
-
-  console.log(property1, property2)
+  const { property2 } = useParams();
 
   const switchComponent = () => {
     switch(property2) {
