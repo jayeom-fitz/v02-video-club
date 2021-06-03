@@ -1,5 +1,6 @@
 import { storeService } from '../f'
 
+// 게시판 이름에 대한 게시글 가져오기
 export async function getPostingsByBoardName(board) {
   var data = [];
 
@@ -16,6 +17,7 @@ export async function getPostingsByBoardName(board) {
   return data;
 }
 
+// 게시글 id로 게시글 가져오기
 export async function getPostingById(id) {
   var data;
 
@@ -24,5 +26,19 @@ export async function getPostingById(id) {
       data = { ...doc.data() }
     })
   
+  return data;
+}
+
+// 해당 유저(pid)가 게시글(bid) 추천 버튼 눌렀는 지
+export async function isClickedUp(bid, pid) {
+  var data = false;
+  
+  await storeService.collection('board').doc(bid).collection('upClicked')
+    .doc(pid).get().then(function (doc) {
+      if(doc.exists) {
+        data = true;
+      }
+    })
+
   return data;
 }

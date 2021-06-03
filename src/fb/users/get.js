@@ -1,5 +1,6 @@
 import { storeService } from '../f'
 
+// id 로 유저 정보 가져오기
 export async function getUserById(id) {
   var data;
 
@@ -13,6 +14,7 @@ export async function getUserById(id) {
   return data;
 }
 
+// 관리 레벨에 따른 유저 정보 가져오기
 export async function getUsersByLevel(sign, level) {
   var array = [];
 
@@ -29,6 +31,7 @@ export async function getUsersByLevel(sign, level) {
   return array;
 }
 
+// 부등호, 레벨, 이름으로 유저 정보 가져오기
 export async function getUsersByLevelAndName(sign, level, name) {
   var array = [];
 
@@ -45,6 +48,7 @@ export async function getUsersByLevelAndName(sign, level, name) {
   return array;
 }
 
+// 이름으로 유저 id 검색 (중복 검사)
 export async function isDuplicatedByName(name) {
   var id;
 
@@ -56,4 +60,16 @@ export async function isDuplicatedByName(name) {
     })
   
   return id;
+}
+
+// 유저의 점수 가져오기
+export async function getUserPoint(id) {
+  var point;
+
+  await storeService.collection('users').doc(id)
+    .get().then(function (doc) {
+      point = doc.data().point;
+    })
+  
+  return point;
 }

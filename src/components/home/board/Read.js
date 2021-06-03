@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import styled, { css } from 'styled-components'
 
 import { getPostingById } from 'fb/board/get';
-import { deleteBoardPosting } from 'fb/board/set';
+import { deleteBoardPosting, updateBoardPosting } from 'fb/board/set';
 
 import { lineFeedDecoding } from 'components/effect/function/func_str'
 import { dateToString } from 'components/effect/function/func_time';
 
 import Loading from 'components/effect/Loading';
 import User from 'components/effect/User';
+import UpButton from './content/UpButton';
 
 function Read(props) {
   const { property1, property2 } = useParams();
@@ -27,6 +28,8 @@ function Read(props) {
       history.push({ pathname: `/board/${property1}` });
       return;
     }
+
+    data.views = data.views + 1; await updateBoardPosting(property2, { views: data.views });
 
     data.content = lineFeedDecoding(data.content);
     setBoard(data);
@@ -69,6 +72,13 @@ function Read(props) {
           </Box>
 
           <Box>
+            <Text>조회수</Text>
+            <Content>
+              {board.views}
+            </Content>
+          </Box>
+
+          <Box>
             <Text>제목</Text>
             <Title>
               <span>{board.title}</span>
@@ -79,6 +89,8 @@ function Read(props) {
             <Text>내용</Text>
             <Pre>{board.content}</Pre>
           </Box>
+
+          <UpButton user={props.user} board={board} setBoard={setBoard} />
 
           {props.user && (props.user.uid === board.pid || props.user.level >= 1) &&
             <div style={{width:'100%', textAlign:'center', padding:'20px'}}> 
