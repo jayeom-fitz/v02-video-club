@@ -7,6 +7,7 @@ import { lineFeedDecoding, lineFeedEncoding } from 'components/effect/function/f
 
 import { writeBoardPosting, updateBoardPosting } from 'fb/board/set';
 import { getPostingById } from 'fb/board/get';
+import { setUserPointUp } from 'fb/users/set';
 import Loading from 'components/effect/Loading';
 
 function Write(props) {
@@ -74,6 +75,8 @@ function Write(props) {
         pid: props.user.uid, pname: props.user.name, pimage: props.user.image, 
         plevel: props.user.level
       })
+
+      await setUserPointUp(props.user.uid, 5);
       alert('작성이 완료되었습니다.');
     }
 

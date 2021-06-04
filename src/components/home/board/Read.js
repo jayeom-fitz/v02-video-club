@@ -12,6 +12,7 @@ import { dateToString } from 'components/effect/function/func_time';
 import Loading from 'components/effect/Loading';
 import User from 'components/effect/User';
 import UpButton from './content/UpButton';
+import ReplyList from './content/ReplyList';
 
 function Read(props) {
   const { property1, property2 } = useParams();
@@ -19,6 +20,8 @@ function Read(props) {
 
   const [loaded, setLoaded] = useState(false);
   const [board, setBoard] = useState(null);
+  
+  const [replies, setReplies] = useState([]);
 
   async function getBoardData() {
     var data = await getPostingById(property2);
@@ -34,6 +37,10 @@ function Read(props) {
     data.content = lineFeedDecoding(data.content);
     setBoard(data);
   }  
+
+  async function getReplys() {
+    // var data = await getPostingById(property2);
+  }
 
   async function init() {
     await getBoardData();
@@ -108,6 +115,14 @@ function Read(props) {
               >삭제</Button>
             </div>
           }
+        </BoxContainer>
+
+        <BoxContainer>
+          <ReplyList 
+            board={board} setBoard={setBoard}
+            user={props.user}
+            replies={replies} setReplies={setReplies}
+          />
         </BoxContainer>
       </> : '삭제된 글입니다' : <Loading size='72' />}
     </Container>
