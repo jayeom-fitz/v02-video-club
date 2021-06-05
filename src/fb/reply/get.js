@@ -1,7 +1,7 @@
 import { storeService } from '../f'
 
-// 글 id 에 대한 댓글 가져오기
-export async function getReplysById(id) {
+// post id 에 대한 댓글 가져오기
+export async function getReplysByPostId(id) {
   var data = [];
 
   await storeService.collection('reply').where('postId', '==', `${id}`)

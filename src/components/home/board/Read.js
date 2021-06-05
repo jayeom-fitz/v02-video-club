@@ -13,6 +13,7 @@ import Loading from 'components/effect/Loading';
 import User from 'components/effect/User';
 import UpButton from './content/UpButton';
 import ReplyList from './content/ReplyList';
+import { getReplysByPostId } from 'fb/reply/get';
 
 function Read(props) {
   const { property1, property2 } = useParams();
@@ -39,11 +40,14 @@ function Read(props) {
   }  
 
   async function getReplys() {
-    // var data = await getPostingById(property2);
+    var data = await getReplysByPostId(property2);
+
+    setReplies(data);
   }
 
   async function init() {
     await getBoardData();
+    await getReplys();
     setLoaded(true);
   }
 

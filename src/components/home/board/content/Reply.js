@@ -7,6 +7,8 @@ import { lineFeedEncoding } from 'components/effect/function/func_str';
 
 import { writeReply } from 'fb/reply/set';
 import { setUserPointUp } from 'fb/users/set';
+import { getReplyCount } from 'fb/board/get';
+import { updateBoardPosting } from 'fb/board/set';
 
 function Reply(props) {
   const { property2 } = useParams();
@@ -28,21 +30,24 @@ function Reply(props) {
       plevel: props.user.level
     }
 
-    await writeReply(replyData);
+    replyData.id = await writeReply(replyData);
 
     await setUserPointUp(props.user.uid, 5);
 
     var data = props.board;
 
+    data.replyCount = await getReplyCount(property2);
+
     if(data.replyCount === undefined) data.replyCount = 1;
     else data.replyCount = data.replyCount + 1;
+
+    await updateBoardPosting(property2, data);
 
     replyData.content = reply;
     var array = [replyData, ...props.replies];
 
     props.setReplies(array);
-    props.setBoard(data);
-
+    props.setBoard(data); setReply('');
     alert('댓글이 작성되었습니다.');
   }
 

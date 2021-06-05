@@ -42,3 +42,15 @@ export async function isClickedUp(bid, pid) {
 
   return data;
 }
+
+// 댓글 갯수 가져오기
+export async function getReplyCount(id) {
+  var data;
+  
+  await storeService.collection('board').doc(id)
+    .get().then(function (doc) {
+      data = doc.data().replyCount
+    })
+
+  return data;
+}
