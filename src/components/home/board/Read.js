@@ -42,6 +42,10 @@ function Read(props) {
   async function getReplys() {
     var data = await getReplysByPostId(property2);
 
+    for(var i=0; i<data.length; i++) {
+      data[i].content = lineFeedDecoding(data[i].content);
+    }
+
     setReplies(data);
   }
 

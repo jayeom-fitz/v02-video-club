@@ -23,3 +23,17 @@ export async function deleteReply(id) {
   await storeService.collection('reply').doc(id)
     .update({active : false});
 }
+
+// 댓글 업데이트
+export async function updateReplyUps(id, ups) {
+  await storeService.collection('reply').doc(id)
+    .update({ ups });
+}
+
+// 댓글 누른 사람 추가
+export async function addReplyUpClickedUser(rid, pid) {
+  await storeService.collection('reply').doc(rid).collection('upClicked')
+    .doc(pid).set({
+      clickedDate: Date.now()
+    })
+}
