@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { dateToString2 } from 'components/effect/function/func_time';
+import { lineFeedEncoding } from 'components/effect/function/func_str';
 
 import User from 'components/effect/User';
 
@@ -11,13 +12,17 @@ import { BsPencil, BsTrash } from 'react-icons/bs';
 import { RiAlarmWarningLine } from 'react-icons/ri';
 
 import { getReplyUps, isClikedLike } from 'fb/reply/get';
-import { updateReplyUps, addReplyUpClickedUser } from 'fb/reply/set';
+import { updateReplyUps, addReplyUpClickedUser
+        , deleteReply, updateReplyContent } from 'fb/reply/set';
 import { setUserPointUp } from 'fb/users/set';
+
 
 function ReplyRow(props) {
   const [edit, setEdit] = useState(false);
   const [content, setContent] = useState(props.reply.content);
+  const [editContent, setEditContent] = useState(props.reply.content);
   const [up, setUp] = useState(props.reply.ups);
+  const [active, setActive] = useState(props.reply.active);
 
   const onLikeClick = async () => {
     if(props.user === undefined) {
@@ -42,35 +47,55 @@ function ReplyRow(props) {
     setUp(replyUps);
   }
 
+  const onSaveClick = async () => {
+    var data = lineFeedEncoding(editContent);
+    await updateReplyContent(props.reply.id, data);
+    setContent(editContent); setEdit(false);
+  }
+
+  const onDeleteClick = async () => {
+    var check = window.confirm('삭제하시겠습니까 ?');
+    if(!check) return;
+
+    await deleteReply(props.reply.id);
+    setActive(false);
+  }
+
   return (
     <Container>
-      <Title>
-        <User 
-          pimage={props.reply.pimage} 
-          pname={props.reply.pname} 
-          plevel={props.reply.plevel}/>
-        <Date >{dateToString2(props.reply.registDate)}</Date>
+      {active && <>
+        <Title>
+          <User 
+            pimage={props.reply.pimage} 
+            pname={props.reply.pname} 
+            plevel={props.reply.plevel}/>
+          <Date >{dateToString2(props.reply.registDate)}</Date>
 
-        <Icon onClick={onLikeClick}><FiThumbsUp size='14'/></Icon>
+          <Icon onClick={onLikeClick}><FiThumbsUp size='16'/></Icon>
 
-        {up !== undefined && up > 0 && 
-          <Span>{up}</Span>
-        }
-        
-        <RiAlarmWarningLine 
-          size='14' style={{paddingLeft:'10px', cursor:'pointer'}}/>
+          {up !== undefined && up > 0 && 
+            <Span>{up}</Span>
+          }
+          
+          <RiAlarmWarningLine 
+            size='16' style={{paddingLeft:'10px', cursor:'pointer'}}/>
 
-        {props.user && ((props.user.uid === props.reply.pid) || (props.user.level >= 1)) && <>
-          <BsPencil 
-            size='14' style={{paddingLeft:'10px', cursor:'pointer'}}/>
-          <BsTrash 
-            size='14' style={{paddingLeft:'10px', cursor:'pointer'}}/>
-        </>}
-      </Title>
+          {props.user && ((props.user.uid === props.reply.pid) || (props.user.level >= 1)) && <>
+            <Icon onClick={() => setEdit(!edit)}><BsPencil size='16'/></Icon>
+            <Icon onClick={() => onDeleteClick()}><BsTrash size='16'/></Icon>
+          </>}
+        </Title>
 
-      <Content>
-        {content}
-      </Content>
+        {edit ? <>
+          <div style={{display:'flex'}}>
+            <Textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} />
+            <Button onClick={onSaveClick}>수정</Button>
+            <Button onClick={() => {
+              setEditContent(content); setEdit(false);
+            }}>취소</Button>
+          </div>
+        </> : <Content>{content}</Content>}
+      </>}
     </Container>
   )
 }
@@ -95,9 +120,26 @@ const Content = styled.pre`
 const Icon = styled.div`
   padding-left: 10px;
   cursor: pointer;
+  height: 16px;
 `
 const Span = styled.span`
   padding: 0 10px;
   font-size: 0.9rem;
   font-weight: 900;
+`
+const Textarea = styled.textarea`
+  flex: 0.8;
+  padding: 10px;
+  margin: 10px;
+  height: 120px;
+  resize: none;
+  border: 1px solid grey;
+
+  &:focus {
+    outline: 2px solid #f70d1a;
+  }
+`
+const Button = styled.button`
+  flex: 0.1;
+  margin: 20px;
 `

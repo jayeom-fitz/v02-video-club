@@ -60,6 +60,9 @@ function Read(props) {
   }, [property2])
 
   async function deletePosting() {
+    var check = window.confirm('삭제하시겠습니까 ?');
+    if(!check) return;
+
     await deleteBoardPosting(property2);
     alert('게시글이 삭제되었습니다.')
     history.push({ pathname: `/board/${property1}` });

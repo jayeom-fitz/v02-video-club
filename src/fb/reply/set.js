@@ -24,7 +24,13 @@ export async function deleteReply(id) {
     .update({active : false});
 }
 
-// 댓글 업데이트
+// 댓글 내용 업데이트
+export async function updateReplyContent(id, content) {
+  await storeService.collection('reply').doc(id)
+    .update({ content });
+}
+
+// 댓글 추천 수 업데이트
 export async function updateReplyUps(id, ups) {
   await storeService.collection('reply').doc(id)
     .update({ ups });
