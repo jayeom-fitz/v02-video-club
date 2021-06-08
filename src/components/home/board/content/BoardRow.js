@@ -12,7 +12,7 @@ function BoardRow(props) {
     <Line>
       <Column flex='0.5'>
         <StyledLink to={`/board/${props.posting.board}/${props.posting.id}`}>
-          {props.posting.title}
+          {props.posting.title} {props.posting.replyCount ? `[${props.posting.replyCount}]` : null}
         </StyledLink>
       </Column>
         

@@ -16,6 +16,7 @@ import { updateReplyUps, addReplyUpClickedUser
         , deleteReply, updateReplyContent } from 'fb/reply/set';
 import { setUserPointUp } from 'fb/users/set';
 import ReportButton from 'components/effect/ReportButton';
+import { updateReplyCount } from 'fb/board/set';
 
 
 function ReplyRow(props) {
@@ -58,6 +59,7 @@ function ReplyRow(props) {
     var check = window.confirm('삭제하시겠습니까 ?');
     if(!check) return;
 
+    await updateReplyCount(props.board.id, -1);
     await deleteReply(props.reply.id);
     setActive(false);
   }

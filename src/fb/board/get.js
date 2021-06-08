@@ -23,7 +23,7 @@ export async function getPostingById(id) {
 
   await storeService.collection('board').doc(id)
     .get().then(function (doc) {
-      data = { ...doc.data() }
+      data = { id, ...doc.data() }
     })
   
   return data;

@@ -12,7 +12,7 @@ function ReplyList(props) {
 
       {props.replies && props.replies.map((reply) => 
         <ReplyRow key={reply.id}
-          user={props.user}
+          user={props.user} board={props.board}
           reply={reply}
         />
       )}

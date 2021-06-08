@@ -8,7 +8,7 @@ import { lineFeedEncoding } from 'components/effect/function/func_str';
 import { writeReply } from 'fb/reply/set';
 import { setUserPointUp } from 'fb/users/set';
 import { getReplyCount } from 'fb/board/get';
-import { updateBoardPosting } from 'fb/board/set';
+import { updateBoardPosting, updateReplyCount } from 'fb/board/set';
 
 function Reply(props) {
   const { property2 } = useParams();
@@ -36,12 +36,7 @@ function Reply(props) {
 
     var data = props.board;
 
-    data.replyCount = await getReplyCount(property2);
-
-    if(data.replyCount === undefined) data.replyCount = 1;
-    else data.replyCount = data.replyCount + 1;
-
-    await updateBoardPosting(property2, data);
+    await updateReplyCount(property2, 1);
 
     replyData.content = reply;
     var array = [replyData, ...props.replies];

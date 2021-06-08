@@ -2,7 +2,7 @@ import { setUserPointUp } from 'fb/users/set';
 import { v4 as uuidv4 } from 'uuid';
 
 import { storeService } from '../f'
-import { getPostingById, isClickedUp } from './get';
+import { getPostingById, getReplyCount, isClickedUp } from './get';
 
 // 게시글 작성
 export async function writeBoardPosting(data) {
@@ -41,4 +41,15 @@ export async function plusUp(bid, pid) {
   await setUserPointUp(data.pid, 5);
 
   return data.ups;
+}
+
+// 게시글 댓글 수 변화
+export async function updateReplyCount(id, value) { 
+  var count = await getReplyCount(id);
+  count = count + value;
+
+  await storeService.collection('board').doc(id)
+    .update({
+      replyCount: count
+    })
 }

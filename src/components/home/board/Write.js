@@ -71,7 +71,7 @@ function Write(props) {
     } else {
       await writeBoardPosting({
         board: property1,
-        title, content: str, registDate: Date.now(), active: true, views: 0, ups: 0,
+        title, content: str, registDate: Date.now(), active: true, views: 0, ups: 0, replyCount: 0,
         pid: props.user.uid, pname: props.user.name, pimage: props.user.image, 
         plevel: props.user.level
       })
