@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from "react-router-dom";
 
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { getPostingById } from 'fb/board/get';
 import { deleteBoardPosting, updateBoardPosting } from 'fb/board/set';

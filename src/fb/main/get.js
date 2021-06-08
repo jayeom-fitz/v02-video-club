@@ -1,5 +1,6 @@
 import { storeService } from '../f'
 
+// 유저 수 가져오기
 export async function getUserCount() {
   var count;
 
@@ -11,6 +12,7 @@ export async function getUserCount() {
   return count;
 }
 
+// 닉네임 사용 불가 단어 체크
 export async function isPossibleName(name) {
   var check = false;
 

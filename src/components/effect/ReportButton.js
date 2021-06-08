@@ -6,10 +6,9 @@ import { RiAlarmWarningLine } from 'react-icons/ri';
 
 function ReportButton(props) {
   const onClickReport = () => {
-    if(props.user === undefined) {
+    if(!props.user) {
       alert('로그인 후 이용 가능합니다.'); return;
     }
-
     window.open(`/report?collection=${props.collection}&docId=${props.docId}`, '_blank', 'width=500,height=600,left=50,top=50')
   }
 

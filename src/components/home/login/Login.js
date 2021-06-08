@@ -86,7 +86,7 @@ export default Login
 
 const Container = styled.div`
   display: none;
-  position: absolute;
+  position: fixed;
   width: 300px;
   height: 400px;
   top: 50%;
