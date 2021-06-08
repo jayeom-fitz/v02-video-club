@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Home from './routes/Home'
 import Admin from 'routes/Admin';
+import Report from 'routes/Report';
 
 function AppRouter(props) {
   return (
@@ -13,6 +14,8 @@ function AppRouter(props) {
         <Route exact path="/admin/" ><Admin user={props.user} /></Route>
         <Route path="/admin/:startComponent/:id" ><Admin user={props.user} /></Route>
         <Route path="/admin/:startComponent" ><Admin user={props.user} /></Route>
+
+        <Route path="/report" ><Report user={props.user} /></Route>
 
         <Route path="/:pageName/:property1/:property2" ><Home user={props.user} /></Route>
         <Route path="/:pageName/:property1" ><Home user={props.user} /></Route>

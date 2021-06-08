@@ -32,7 +32,7 @@ function Reply(props) {
 
     replyData.id = await writeReply(replyData);
 
-    await setUserPointUp(props.user.uid, 5);
+    await setUserPointUp(props.user.uid, 1);
 
     var data = props.board;
 

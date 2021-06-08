@@ -15,6 +15,7 @@ import { getReplyUps, isClikedLike } from 'fb/reply/get';
 import { updateReplyUps, addReplyUpClickedUser
         , deleteReply, updateReplyContent } from 'fb/reply/set';
 import { setUserPointUp } from 'fb/users/set';
+import ReportButton from 'components/effect/ReportButton';
 
 
 function ReplyRow(props) {
@@ -76,14 +77,18 @@ function ReplyRow(props) {
           {up !== undefined && up > 0 && 
             <Span>{up}</Span>
           }
-          
-          <RiAlarmWarningLine 
-            size='16' style={{paddingLeft:'10px', cursor:'pointer'}}/>
 
           {props.user && ((props.user.uid === props.reply.pid) || (props.user.level >= 1)) && <>
             <Icon onClick={() => setEdit(!edit)}><BsPencil size='16'/></Icon>
             <Icon onClick={() => onDeleteClick()}><BsTrash size='16'/></Icon>
           </>}
+
+          <div style={{marginLeft:'10px'}}>
+            <ReportButton 
+              user={props.user} 
+              collection='reply' 
+              docId={props.reply.id} />
+          </div>
         </Title>
 
         {edit ? <>
