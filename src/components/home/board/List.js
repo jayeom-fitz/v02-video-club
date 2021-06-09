@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 
 import Loading from 'components/effect/Loading';
+import { setPostingLevelByPageName, setTitleByPageName } from 'components/effect/function/func_board';
 
 import { getPostingsByBoardName } from 'fb/board/get';
 
@@ -17,13 +18,6 @@ function List(props) {
   const [postings, setPostings] = useState([]);
   const [postingLevel, setPostingLevel] = useState(0);
   
-  function setTitleByPageName() {
-    switch(property1) {
-      case 'notice' : setPostingLevel(1); setTitle('공지사항'); return;
-      default : return;
-    }
-  }
-
   async function getPostingsByPageName() {
     var array = await getPostingsByBoardName(property1);
 
@@ -31,7 +25,9 @@ function List(props) {
   }
 
   async function init() {
-    setTitleByPageName();
+    setTitle( setTitleByPageName(property1) );
+    setPostingLevel( setPostingLevelByPageName(property1) );
+    
     await getPostingsByPageName();
     setLoaded(true);
   }

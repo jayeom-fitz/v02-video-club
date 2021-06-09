@@ -44,7 +44,7 @@ function ReplyRow(props) {
 
     await updateReplyUps(props.reply.id, replyUps);
     await addReplyUpClickedUser(props.reply.id, props.user.uid);
-    await setUserPointUp(props.reply.pid, 5);
+    await setUserPointUp(props.reply.pid, 1);
 
     setUp(replyUps);
   }

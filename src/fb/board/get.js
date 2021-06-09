@@ -17,6 +17,23 @@ export async function getPostingsByBoardName(board) {
   return data;
 }
 
+// 게시판 이름에 대한 게시글 가져오기 2 - startAfter 게시 시간 이후로
+export async function getPostingsByBoardName2(board, registDate) {
+  var data = [];
+
+  await storeService.collection('board').where('board', '==', `${board}`)
+    .where('active', '==', true).orderBy('registDate', 'desc').startAfter(registDate)
+    .get().then(function (snapshot) {
+      snapshot.forEach(function (doc) {
+        data.push({
+          id: doc.id, ...doc.data()
+        })
+      })
+    })
+  
+  return data;
+}
+
 // 게시글 id로 게시글 가져오기
 export async function getPostingById(id) {
   var data;

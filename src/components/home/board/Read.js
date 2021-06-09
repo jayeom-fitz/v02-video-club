@@ -3,17 +3,22 @@ import { useParams, useHistory } from "react-router-dom";
 
 import styled from 'styled-components'
 
-import { getPostingById } from 'fb/board/get';
+import { getPostingById, getPostingsByBoardName2 } from 'fb/board/get';
 import { deleteBoardPosting, updateBoardPosting } from 'fb/board/set';
+import { getReplysByPostId } from 'fb/reply/get';
+
 
 import { lineFeedDecoding } from 'components/effect/function/func_str'
 import { dateToString } from 'components/effect/function/func_time';
+import { setPostingLevelByPageName, setTitleByPageName } from 'components/effect/function/func_board';
 
 import Loading from 'components/effect/Loading';
 import User from 'components/effect/User';
+import ReportButton from 'components/effect/ReportButton';
+
 import UpButton from './content/UpButton';
 import ReplyList from './content/ReplyList';
-import { getReplysByPostId } from 'fb/reply/get';
+import BoardList from './content/BoardList';
 
 function Read(props) {
   const { property1, property2 } = useParams();
@@ -23,6 +28,7 @@ function Read(props) {
   const [board, setBoard] = useState(null);
   
   const [replies, setReplies] = useState([]);
+  const [postings, setPostings] = useState([]);
 
   async function getBoardData() {
     var data = await getPostingById(property2);
@@ -36,6 +42,8 @@ function Read(props) {
     data.views = data.views + 1; await updateBoardPosting(property2, { views: data.views });
 
     data.content = lineFeedDecoding(data.content);
+
+    await getNextPostings(data.registDate);
     setBoard(data);
   }  
 
@@ -47,6 +55,12 @@ function Read(props) {
     }
 
     setReplies(data);
+  }
+
+  async function getNextPostings(registDate) {
+    var data = await getPostingsByBoardName2(property1, registDate);
+
+    setPostings(data);
   }
 
   async function init() {
@@ -101,6 +115,11 @@ function Read(props) {
             <Title>
               <span>{board.title}</span>
             </Title>
+
+            <ReportButton 
+              user={props.user} 
+              collection='board' 
+              docId={board.id} />
           </Box>
 
           <Box>
@@ -135,6 +154,15 @@ function Read(props) {
             replies={replies} setReplies={setReplies}
           />
         </BoxContainer>
+        
+        {postings && postings.length !== 0 && <BoxContainer style={{width:'100%', padding:'10px 20px', margin:'0 0 0 -20px'}}>
+          <BoardList
+            user={props.user}
+            title={setTitleByPageName(property1)}
+            postings={postings}
+            postingLevel={setPostingLevelByPageName(property1)}
+          />
+        </BoxContainer>}
       </> : '삭제된 글입니다' : <Loading size='72' />}
     </Container>
   )
@@ -172,7 +200,7 @@ const Content = styled.div`
   margin: 0 20px;
 `
 const Title = styled.div`
-  flex: 0.8;
+  flex: 0.7;
   padding: 10px;
   margin: 0 20px;
   border-bottom: 1px solid lightgrey;

@@ -38,7 +38,7 @@ export async function plusUp(bid, pid) {
   data.ups = data.ups + 1;
   await updateBoardPosting(bid, data);
 
-  await setUserPointUp(data.pid, 5);
+  await setUserPointUp(data.pid, 1);
 
   return data.ups;
 }

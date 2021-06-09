@@ -76,7 +76,7 @@ function Write(props) {
         plevel: props.user.level
       })
 
-      await setUserPointUp(props.user.uid, 5);
+      await setUserPointUp(props.user.uid, 1);
       alert('작성이 완료되었습니다.');
     }
 
