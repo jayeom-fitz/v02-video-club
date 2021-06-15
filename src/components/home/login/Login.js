@@ -36,7 +36,8 @@ function Login() {
         image : data.user.photoURL,
         joinDate : Date.now(),
         level : 0,
-        point : 0
+        point : 0,
+        reportCount : 0,
       });
       await userCountUp();
     }   

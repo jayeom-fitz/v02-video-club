@@ -1,5 +1,5 @@
 import { storeService } from '../f'
-import { getUserPoint } from './get';
+import { getUserPoint, getUserReportCount } from './get';
 
 // 유저 데이터 업데이트
 export async function setUserData(id, data) {
@@ -26,3 +26,10 @@ export async function setUserPointUp(id, p) {
     .update({ point : point + p });
 }
 
+// 유저 신고 횟수 증가
+export async function setUserReportCountUp(id) {
+  var reportCount = await getUserReportCount(id);
+
+  await storeService.collection('users').doc(id)
+    .update({ reportCount : reportCount + 1 });
+}

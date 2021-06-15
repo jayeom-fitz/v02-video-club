@@ -9,6 +9,7 @@ import { storeService } from 'fb/f';
 
 import { writeReport } from 'fb/report/set';
 import { isDuplicatedReport } from 'fb/report/get';
+import { setUserReportCountUp } from 'fb/users/set';
 
 import { lineFeedEncoding } from 'components/effect/function/func_str';
 
@@ -79,6 +80,8 @@ function Report(props) {
     }
 
     await writeReport(reportData);
+
+    await setUserReportCountUp(rdata.pid);
 
     alert('신고가 처리되었습니다.'); window.close();
   }

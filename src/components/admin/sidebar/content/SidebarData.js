@@ -17,6 +17,20 @@ export const SidebarData = [
       }
     ]
   },
+  {
+    title: '기타',
+    path: '#',
+    subNav: [
+      {
+        title: '신고',
+        path: '/admin/reports'
+      },
+      {
+        title: 'TEST 2',
+        path: '#'
+      },
+    ]
+  },
   // {
   //   title: 'TEST',
   //   path: '#',

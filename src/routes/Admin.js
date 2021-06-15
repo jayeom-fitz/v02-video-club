@@ -7,6 +7,9 @@ import Sidebar from 'components/admin/sidebar/Sidebar';
 import Users from 'components/admin/users/Users';
 import User from 'components/admin/users/User';
 
+import Reports from 'components/admin/report/Reports';
+import Report from 'components/admin/report/Report';
+
 function Admin(props) {
   const { startComponent } = useParams();
 
@@ -21,7 +24,10 @@ function Admin(props) {
       case 'users' :
       case 'ban_users' : return <Users />
       case 'user' : return <User user={props.user} />   
-       
+      
+      case 'reports' : return <Reports />
+      case 'report' : return <Report />
+
       default : return <Main user={props.user} />
     }
   }

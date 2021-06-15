@@ -155,7 +155,8 @@ function Read(props) {
           />
         </BoxContainer>
         
-        {postings && postings.length !== 0 && <BoxContainer style={{width:'100%', padding:'10px 20px', margin:'0 0 0 -20px'}}>
+        {postings && postings.length !== 0 && 
+        <BoxContainer style={{width:'100%', padding:'10px 20px', margin:'0 0 0 -20px'}}>
           <BoardList
             user={props.user}
             title={setTitleByPageName(property1)}

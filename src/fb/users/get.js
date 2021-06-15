@@ -73,3 +73,15 @@ export async function getUserPoint(id) {
   
   return point;
 }
+
+// 유저의 신고 당한 횟수 가져오기
+export async function getUserReportCount(id) {
+  var reportCount;
+
+  await storeService.collection('users').doc(id)
+    .get().then(function (doc) {
+      reportCount = doc.data().reportCount;
+    })
+  
+  return reportCount;
+}
