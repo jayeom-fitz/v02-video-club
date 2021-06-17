@@ -1,6 +1,7 @@
 import { storeService } from '../f'
 
 import { v4 as uuidv4 } from 'uuid';
+import { getReportsByDocId } from './get';
 
 // 신고 작성
 export async function writeReport(data) {
@@ -10,4 +11,20 @@ export async function writeReport(data) {
     .set({ ...data });
 
   return id;
+}
+
+// 신고 처리
+export async function processReports(docId, processContent, processor) {
+  const data = await getReportsByDocId(docId);
+  const processDate = Date.now();
+
+  for(var i=0; i<data.length; i++) {
+    await storeService.collection('report').doc(data[i])
+      .update({
+        active: false,
+        processContent,
+        processDate,
+        ...processor
+      });
+  }
 }

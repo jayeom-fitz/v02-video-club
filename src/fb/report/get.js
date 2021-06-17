@@ -19,6 +19,10 @@ export async function getReportById(id) {
   var data;
 
   await storeService.collection('report').doc(id).get().then(function (doc) {
+    if(!doc.exists) {
+      data = null; return;
+    }
+
     data = {
       id : doc.id, ...doc.data()
     }    
@@ -38,6 +42,22 @@ export async function getReportsByActive(active) {
         data.push({
           id: doc.id, ...doc.data()
         })
+      })
+    })
+  
+  return data;
+}
+
+// 신고 목록 가져오기 by docId
+export async function getReportsByDocId(docId) {
+  var data = [];
+
+  await storeService.collection('report')
+    .where('active', '==', true)
+    .where('docId', '==', docId)
+    .get().then(function (snapshot) {
+      snapshot.forEach(function (doc) {
+        data.push(doc.id)
       })
     })
   

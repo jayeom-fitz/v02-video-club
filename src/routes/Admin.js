@@ -26,7 +26,7 @@ function Admin(props) {
       case 'user' : return <User user={props.user} />   
       
       case 'reports' : return <Reports />
-      case 'report' : return <Report />
+      case 'report' : return <Report user={props.user}/>
 
       default : return <Main user={props.user} />
     }

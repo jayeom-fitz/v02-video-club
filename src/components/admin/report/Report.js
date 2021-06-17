@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from "react-router-dom";
+import { useHistory, useParams, Link } from "react-router-dom";
 
 import styled, { css } from 'styled-components'
 
 import User from 'components/effect/User';
 import Loading from 'components/effect/Loading';
-import { lineFeedDecoding } from 'components/effect/function/func_str';
+import { lineFeedDecoding, lineFeedEncoding } from 'components/effect/function/func_str';
 
-import { getReportById } from 'fb/report/get';
 import { storeService } from 'fb/f';
+import { getReportById } from 'fb/report/get';
+import { processReports } from 'fb/report/set';
+import { dateToString } from 'components/effect/function/func_time';
 
-function Report() {
+function Report(props) {
   const { id } = useParams();
+  const history = useHistory();
 
   const [loaded, setLoaded] = useState(false);
   const [report, setReport] = useState(null);
   const [content, setContent] = useState('');
 
+  const [processContent, setProcessContent] = useState('');
+  const [active, setActive] = useState(true);
+
   async function getReport() {
     var data = await getReportById(id);
+
+    if(data == null) {
+      alert('잘못된 접근입니다.');
+      window.history.back(); return;
+    }
 
     var dataContent;
 
@@ -45,6 +56,30 @@ function Report() {
       case 'board' : return '게시글';
       default : return '';
     }
+  }
+
+  const onSubmit = async () => {
+    if(processContent.replace(/ /gi, '').replace(/\n/gi, '') === '') {
+      document.getElementById('vc_processContent').focus(); 
+      alert('처리 내용을 입력해주세요.'); return;
+    }
+
+    if(!active) {
+
+    }
+
+    const pcontent = lineFeedEncoding(processContent);
+
+    await processReports(report.docId, pcontent, {
+      processId : props.user.uid,
+      processImage: props.user.image,
+      processName : props.user.name,
+      processLevel : props.user.level,
+      processActive : active
+    });
+
+    alert('처리되었습니다.');
+    history.push({ pathname: '/admin/reports' });
   }
 
   return (
@@ -96,9 +131,75 @@ function Report() {
                 <Pre>{report.content}</Pre>
               </Content>
             </Box>
-            
           </BoxContainer>
-          {report.id}
+          
+          {report.processContent !== undefined ? 
+          <BoxContainer>
+            <Box>
+              <Text>처리자</Text>
+              <Content>
+                <User
+                  pid={report.processId}
+                  pimage={report.processImage} 
+                  pname={report.processName} 
+                  plevel={report.processLevel}
+                  admin={true}/>
+              </Content>
+            </Box>
+
+            <Box>
+              <Text>처리 내용</Text>
+              <Content>
+                <Pre>{lineFeedDecoding(report.processContent)}</Pre>
+              </Content>
+            </Box>
+
+            <Box>
+              <Text>삭제 여부</Text>
+              <Content>
+                <label><input type="radio" checked={report.processActive} readOnly
+                /> 유지</label>
+
+                <label><input type="radio" checked={!report.processActive} readOnly
+                /> 삭제</label>
+              </Content>
+            </Box>
+
+            <Box>
+              <Text>처리 일자</Text>
+              <Content>
+                {dateToString(report.processDate)}
+              </Content>
+            </Box>
+          </BoxContainer>
+          :
+          <BoxContainer>
+            <Box>
+              <Text>처리 내용</Text>
+              <Textarea 
+                id='vc_processContent'
+                value={processContent} 
+                onChange={(e) => setProcessContent(e.target.value)}/>
+            </Box>
+
+            <Box>
+              <Text>삭제 여부</Text>
+              <Content>
+                <label><input type="radio" id="level" value={true} checked={active}
+                          onChange={() => setActive(true)}
+                /> 유지</label>
+
+                <label><input type="radio" id="level" value={false} checked={!active}
+                          onChange={() => setActive(false)}
+                /> 삭제</label>
+              </Content>
+            </Box>
+
+            <Box style={{justifyContent:'center'}}>
+              <button onClick={onSubmit}>처리 완료</button>
+            </Box>
+          </BoxContainer>
+          }
         </Container>
       </> : <Loading size='72' />}
     </div>
@@ -139,4 +240,11 @@ const Content = styled.div`
 `
 const Pre = styled.pre`
   margin: 0;
+`
+const Textarea = styled.textarea`
+  flex: 0.8;
+  height: 100px;
+  padding: 5px;
+  margin: 0 15px;
+  resize: none;
 `
