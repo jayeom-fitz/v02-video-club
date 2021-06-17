@@ -69,6 +69,7 @@ function ReplyRow(props) {
       {active && <>
         <Title>
           <User 
+            pid={props.reply.pid}
             pimage={props.reply.pimage} 
             pname={props.reply.pname} 
             plevel={props.reply.plevel}/>

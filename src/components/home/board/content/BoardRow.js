@@ -18,6 +18,7 @@ function BoardRow(props) {
         
       <Column flex='0.2'>
         <User 
+          pid={props.posting.pid}
           pimage={props.posting.pimage} 
           pname={props.posting.pname} 
           plevel={props.posting.plevel}/>

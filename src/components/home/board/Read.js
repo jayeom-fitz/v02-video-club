@@ -90,6 +90,7 @@ function Read(props) {
             <Text>작성자</Text>
             <Content>
               <User 
+                pid={board.pid}
                 pimage={board.pimage} 
                 pname={board.pname} 
                 plevel={board.plevel}/>

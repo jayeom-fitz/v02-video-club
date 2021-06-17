@@ -7,7 +7,7 @@ import Avatar from "@material-ui/core/Avatar";
 
 function User(props) {
   return (
-    <StyledLink to={`/`}>
+    <StyledLink to={props.admin ? `/admin/user/${props.pid}` : `/user/${props.pid}`}>
       <Container>
         <StyledAvatar src={props.pimage} />
         <Text

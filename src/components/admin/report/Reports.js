@@ -33,6 +33,16 @@ function Reports() {
     }
   }
 
+  function contentToString(str) {
+    str = lineFeedDecoding(str)
+
+    if(str.length > 20) {
+      str = str.substring(0, 20) + '...';
+    }
+  
+    return str;
+  }
+
   return (
     <div style={{width:'100%'}}>
       {loaded ? <>
@@ -60,7 +70,7 @@ function Reports() {
                 <StyledLink key={report.id} to={`/admin/report/${report.id}`}>
                   <Line>
                     <Column flex='0.2'>{collectionToString(report.collection)}</Column>
-                    <Column flex='0.5'>{lineFeedDecoding(report.content)}</Column>
+                    <Column flex='0.5'>{contentToString(report.content)}</Column>
                     <Column flex='0.3'>{dateToString(report.registDate)}</Column>
                   </Line>
                 </StyledLink>

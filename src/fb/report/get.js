@@ -14,6 +14,19 @@ export async function isDuplicatedReport(docId, pid) {
   return check;
 }
 
+// 신고 가져오기
+export async function getReportById(id) {
+  var data;
+
+  await storeService.collection('report').doc(id).get().then(function (doc) {
+    data = {
+      id : doc.id, ...doc.data()
+    }    
+  })
+  
+  return data;
+}
+
 // 신고 목록 가져오기
 export async function getReportsByActive(active) {
   var data = [];
