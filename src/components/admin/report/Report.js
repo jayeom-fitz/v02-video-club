@@ -9,7 +9,7 @@ import { lineFeedDecoding, lineFeedEncoding } from 'components/effect/function/f
 
 import { storeService } from 'fb/f';
 import { getReportById } from 'fb/report/get';
-import { processReports } from 'fb/report/set';
+import { processReport, processReports } from 'fb/report/set';
 import { dateToString } from 'components/effect/function/func_time';
 
 function Report(props) {
@@ -40,8 +40,6 @@ function Report(props) {
     dataContent = lineFeedDecoding(dataContent);
     data.content = lineFeedDecoding(data.content);
 
-    console.log(data);
-
     setContent(dataContent); setReport(data);  
     setLoaded(true);
   }
@@ -58,25 +56,33 @@ function Report(props) {
     }
   }
 
-  const onSubmit = async () => {
+  async function onSubmit(check) {
     if(processContent.replace(/ /gi, '').replace(/\n/gi, '') === '') {
       document.getElementById('vc_processContent').focus(); 
       alert('처리 내용을 입력해주세요.'); return;
     }
 
     if(!active) {
-
+      await storeService.collection(report.collection).doc(report.docId).update({
+        active : false
+      });
     }
 
     const pcontent = lineFeedEncoding(processContent);
 
-    await processReports(report.docId, pcontent, {
+    const processor = {
       processId : props.user.uid,
       processImage: props.user.image,
       processName : props.user.name,
       processLevel : props.user.level,
       processActive : active
-    });
+    }
+
+    if(check) {
+      await processReport(id, pcontent, processor);
+    } else {
+      await processReports(report.docId, pcontent, processor);
+    }
 
     alert('처리되었습니다.');
     history.push({ pathname: '/admin/reports' });
@@ -196,7 +202,8 @@ function Report(props) {
             </Box>
 
             <Box style={{justifyContent:'center'}}>
-              <button onClick={onSubmit}>처리 완료</button>
+              <Button onClick={() => onSubmit(true)}>단일 처리</Button>
+              <Button onClick={() => onSubmit(false)}>전체 처리</Button>
             </Box>
           </BoxContainer>
           }
@@ -247,4 +254,9 @@ const Textarea = styled.textarea`
   padding: 5px;
   margin: 0 15px;
   resize: none;
+`
+const Button = styled.button`
+  width: 80px;
+  height: 60px;
+  margin: 0 10px;
 `

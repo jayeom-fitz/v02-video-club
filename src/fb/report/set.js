@@ -13,7 +13,20 @@ export async function writeReport(data) {
   return id;
 }
 
-// 신고 처리
+// 신고 단일 처리
+export async function processReport(id, processContent, processor) {
+  const processDate = Date.now();
+
+  await storeService.collection('report').doc(id)
+    .update({
+      active: false,
+      processContent,
+      processDate,
+      ...processor
+    });
+}
+
+// 신고 전체 처리
 export async function processReports(docId, processContent, processor) {
   const data = await getReportsByDocId(docId);
   const processDate = Date.now();
