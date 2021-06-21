@@ -6,6 +6,7 @@ import Login from 'components/home/login/Login'
 import Sidebar from 'components/home/sidebar/Sidebar'
 
 import Board from 'components/home/board/Board';
+import Main from 'components/home/main/Main';
 
 function Home(props) {
   const { pageName } = useParams();
@@ -14,7 +15,7 @@ function Home(props) {
     switch(prop) {
       case 'board': return <Board user={props.user} />
 
-      default : return null;
+      default : return <Main user={props.user} />
     }
   }
 

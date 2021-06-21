@@ -1,4 +1,5 @@
 import  { AiFillHome, AiFillFire, AiFillNotification } from 'react-icons/ai';
+import  { HiOutlineClipboardCopy } from 'react-icons/hi';
 
 export const SidebarData = [
   {
@@ -15,6 +16,11 @@ export const SidebarData = [
     title: '인기',
     path: '/',
     icon: AiFillFire
+  },  
+  {
+    title: '건의',
+    path: '/board/suggest',
+    icon: HiOutlineClipboardCopy
   },  
   // {
   //   title: 'TEST',
