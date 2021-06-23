@@ -4,14 +4,26 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 
 import User from 'components/effect/User';
+import { getVideoIdByLink } from 'components/effect/function/func_video';
 
 function Write(props) {
   const [link, setLink] = useState('');
+  const [linkCheck, setLinkCheck] = useState(false);
   const [linkInput, setLinkInput] = useState('');
   const [content, setContent] = useState('');
 
   function onChangeLink(str) {
-    setLinkInput(str)
+    setLinkInput(str);
+
+    const data = getVideoIdByLink(str);
+
+    if(data === null) {
+      if(linkCheck) setLinkCheck(false);
+      if(link !== '') setLink('');
+      return;
+    }
+    
+    console.log(data);
   }
 
   return (

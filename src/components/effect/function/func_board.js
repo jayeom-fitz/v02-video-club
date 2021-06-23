@@ -1,5 +1,3 @@
-
-
 exports.setTitleByPageName = function (pageName) {
   switch(pageName) {
     case 'notice' : return '공지사항';
