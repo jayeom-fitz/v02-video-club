@@ -6,9 +6,14 @@ import styled from 'styled-components'
 import Write from './content/Write';
 
 function Main(props) {
+  const [comments, setComments] = useState([]);
+
   return (
     <Container>
-      {props.user && <Write user={props.user} /> }
+      {props.user && 
+        <Write user={props.user} 
+              comments={comments} setComments={setComments} /> 
+      }
     </Container>
   )
 }

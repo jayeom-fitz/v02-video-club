@@ -1,38 +1,70 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom";
+import React, { useState } from 'react'
 
 import styled from 'styled-components'
 
 import User from 'components/effect/User';
-import { getVideoIdByLink } from 'components/effect/function/func_video';
+import { getVideoLinkByIdAndPlatform, getVideoIdByLink } from 'components/effect/function/func_video';
+
+import { writeCommentPosting } from 'fb/comment/set';
 
 function Write(props) {
   const [link, setLink] = useState('');
-  const [linkCheck, setLinkCheck] = useState(false);
   const [linkInput, setLinkInput] = useState('');
   const [content, setContent] = useState('');
+
+  const [id, setId] = useState('');
+  const [platform, setPlatform] = useState('');
 
   function onChangeLink(str) {
     setLinkInput(str);
 
-    const data = getVideoIdByLink(str);
+    var data = getVideoIdByLink(str);
 
     if(data === null) {
-      if(linkCheck) setLinkCheck(false);
-      if(link !== '') setLink('');
-      return;
+      if(link !== '') setLink('');  return;
     }
+
+    setId(data.id); setPlatform(data.platform);
+    data = getVideoLinkByIdAndPlatform(data.id, data.platform);
     
-    console.log(data);
+    setLink(data);
+  }
+
+  async function onSubmit() {
+    if(link === '') {
+      document.getElementById('vc_link').focus(); 
+      alert('잘못된 링크입니다.'); return;
+    } else if(content.replace(/ /gi, '').replace(/\n/gi, '') === '') {
+      document.getElementById(`vc_content`).focus(); 
+      alert('내용을 입력해주세요.'); return;
+    }
+
+    var data = {
+      linkId : id, platform, content, 
+      ups : 0, active : true, replyCount : 0, reply : false, 
+      pid : props.user.uid, pname : props.user.name, 
+      pimage : props.user.image, plevel : props.user.level,
+      registDate : Date.now()
+    };
+
+    data = await writeCommentPosting(data);
+
+    alert('게시되었습니다'); setLink(''); setLinkInput(''); setContent('');
+
+    props.setComments([data, ...props.comments]);
   }
 
   return (
     <Container>
-      <Box flex='0.4'>
-        이미지
+      <Box flex='0.5'>
+        <IframeBox>
+          {link !== '' &&
+            <Iframe src={link} frameborder="0" allowfullscreen="true" />
+          }
+        </IframeBox>
       </Box>
 
-      <Box flex='0.6'>
+      <Box flex='0.5'>
         <User 
           pid={props.user.uid}
           pimage={props.user.image} 
@@ -53,6 +85,10 @@ function Write(props) {
             placeholder='댓글을 입력해주세요' 
             value={content}
             onChange={(e) => setContent(e.target.value)} />
+        </InputBox>
+
+        <InputBox>
+          <Button onClick={() => onSubmit()}>게시</Button>
         </InputBox>
         
       </Box>
@@ -102,3 +138,29 @@ const Textarea = styled.textarea`
     outline: none;
   }
 `
+const IframeBox = styled.div`
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.26%;
+`
+const Iframe = styled.iframe`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`
+const Button = styled.button`
+  width: 80%;
+  height: 30px;
+  margin: 5px auto;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: #f70d1a;
+
+  &:hover {
+    background-color: #ff3d3a;
+  }
+`
+// #f70d1a ferrari red
+// #ffa6c9 carnation

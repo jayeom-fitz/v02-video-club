@@ -8,6 +8,8 @@ exports.getVideoIdByLink = function (link) {
     
     for(var i=0; i<link.length; i++) {
       if(link[i][0] === 'v') {
+        if(link[i].substring(2).length !== 11) return null;
+        
         return {
           platform : 'youtube', id : link[i].substring(2)
         }
@@ -15,9 +17,23 @@ exports.getVideoIdByLink = function (link) {
     }
 
     return null;
-  } else if(link.substring(0, 33) === 'vod.afreecatv.com/PLAYER/STATION/') {
-    return {
-      platform : 'afreecatv', id : link.substring(33)
-    }
   } else return null;
+}
+
+exports.getVideoLinkByIdAndPlatform = function (id, platform) {
+  switch(platform) {
+    case 'youtube' : 
+      return `https://www.youtube.com/embed/${id}`;
+    default :
+      return null;
+  }
+}
+
+exports.getImageLinkByIdAndPlatform = function (id, platform) {
+  switch(platform) {
+    case 'youtube' : 
+      return `http://img.youtube.com/vi/${id}/0.jpg`;
+    default :
+      return null;
+  }
 }
