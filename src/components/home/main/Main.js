@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 
 import Write from './content/Write';
+import List from './content/List';
 
 function Main(props) {
   const [comments, setComments] = useState([]);
@@ -14,6 +15,8 @@ function Main(props) {
         <Write user={props.user} 
               comments={comments} setComments={setComments} /> 
       }
+
+      <List comments={comments} setComments={setComments} />
     </Container>
   )
 }

@@ -6,6 +6,7 @@ import User from 'components/effect/User';
 import { getVideoLinkByIdAndPlatform, getVideoIdByLink } from 'components/effect/function/func_video';
 
 import { writeCommentPosting } from 'fb/comment/set';
+import { setCommentCountUp } from 'fb/video/set';
 
 function Write(props) {
   const [link, setLink] = useState('');
@@ -48,6 +49,7 @@ function Write(props) {
     };
 
     data = await writeCommentPosting(data);
+    await setCommentCountUp(data.id);
 
     alert('게시되었습니다'); setLink(''); setLinkInput(''); setContent('');
 
