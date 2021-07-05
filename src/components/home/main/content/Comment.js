@@ -2,17 +2,29 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 
+import User from 'components/effect/User'
 import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_video'
 
 function Comment(props) {
   console.log(props.comment)
   return (
     <Container>
-      <Box flex='0.5'>
-        <ImageBox>
-          <Image src={getImageLinkByIdAndPlatform(props.comment.linkId, props.comment.platform)} />
-        </ImageBox>
-      </Box>
+      <Content>
+        <Box flex='0.5'>
+          <ImageBox>
+            <Image src={getImageLinkByIdAndPlatform(props.comment.linkId, props.comment.platform)} />
+          </ImageBox>
+        </Box>
+
+        <Box flex='0.5'>
+          <User
+            pid={props.comment.pid}
+            pimage={props.comment.pimage} 
+            pname={props.comment.pname} 
+            plevel={props.comment.plevel}/>
+        </Box>
+
+      </Content>
     </Container>
   )
 }
@@ -20,12 +32,14 @@ function Comment(props) {
 export default Comment
 
 const Container = styled.div`
-  display: flex;
   width: 80%;
   margin: 20px auto;
-  align-items: center;
   border: 1px solid lightgrey;
   box-shadow: 5px 5px 5px grey;
+`
+const Content = styled.div`
+  display: flex;
+  align-items: center;
 `
 const Box = styled.div`
   flex: ${(props) => props.flex || 1};

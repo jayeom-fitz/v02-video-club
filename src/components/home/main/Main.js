@@ -26,4 +26,5 @@ export default Main
 const Container = styled.div`
   width: 100%;
   padding: 20px 50px;
+  background-color: #ddd;
 `

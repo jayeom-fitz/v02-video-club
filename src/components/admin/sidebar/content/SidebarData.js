@@ -26,7 +26,11 @@ export const SidebarData = [
         path: '/admin/reports'
       },
       {
-        title: 'TEST 2',
+        title: '카테고리',
+        path: '/admin/kategorie'
+      },
+      {
+        title: 'TEST',
         path: '#'
       },
     ]

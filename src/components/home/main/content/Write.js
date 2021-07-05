@@ -107,6 +107,7 @@ const Container = styled.div`
   align-items: center;
   border: 1px solid lightgrey;
   box-shadow: 5px 5px 5px grey;
+  background-color: white;
 `
 const Box = styled.div`
   flex: ${(props) => props.flex || 1};

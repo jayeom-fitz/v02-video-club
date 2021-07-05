@@ -7,8 +7,9 @@ import Sidebar from 'components/admin/sidebar/Sidebar';
 import Users from 'components/admin/users/Users';
 import User from 'components/admin/users/User';
 
-import Reports from 'components/admin/report/Reports';
-import Report from 'components/admin/report/Report';
+import Reports from 'components/admin/etc/report/Reports';
+import Report from 'components/admin/etc/report/Report';
+import Kategories from 'components/admin/etc/kategorie/Kategories';
 
 function Admin(props) {
   const { startComponent } = useParams();
@@ -27,6 +28,8 @@ function Admin(props) {
       
       case 'reports' : return <Reports />
       case 'report' : return <Report user={props.user}/>
+
+      case 'kategorie' : return <Kategories />
 
       default : return <Main user={props.user} />
     }
