@@ -28,11 +28,11 @@ export async function isPossibleName(name) {
 }
 
 // 카테고리 목록 가져오기
-export async function getKategories() {
-  var data;
+export async function getKategories(active) {
+  var data = [];
 
   await storeService.collection('main').doc('kategorie').collection('kategories')
-    .get().then(function (snapshot) {
+    .where('active', '==', active).get().then(function (snapshot) {
       snapshot.forEach(function (doc) {
         data.push({
           id : doc.id, ...doc.data()
