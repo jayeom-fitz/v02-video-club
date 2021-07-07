@@ -9,7 +9,7 @@ import Loading from 'components/effect/Loading';
 import { dateToString } from 'components/effect/function/func_time';
 import { lineFeedDecoding } from 'components/effect/function/func_str';
 
-import { getKategories } from 'fb/main/get';
+import { getKategories, isDuplicatedByKategorieId } from 'fb/main/get';
 import { registKategorie } from 'fb/main/set';
 
 function Kategories(props) {
@@ -36,6 +36,12 @@ function Kategories(props) {
     } else if(kname.replace(/ /gi, '') === '') {
       document.getElementById('vc_kname').focus(); alert('카테고리명을 입력해주세요'); return;
     } 
+
+    var check = await isDuplicatedByKategorieId(kid);
+
+    if(check) {
+      document.getElementById('vc_kid').focus(); alert('중복된 아이디 입니다'); return;
+    }
 
     var data = {
       name : kname, commentCount : 0, active : true, registDate : Date.now(),
@@ -75,11 +81,11 @@ function Kategories(props) {
               <Column flex='0.1'>코멘트 수</Column>
               <Column flex='0.2'>생성자</Column>
               <Column flex='0.2'>생성일</Column>
-              <Column flex='0.1'>수정</Column>
+              <Column flex='0.1'></Column>
             </Line>
 
             {kategories.length !== 0 ? kategories.map((kategorie) => 
-              <Kategorie kategorie={kategorie} />
+              <Kategorie kategorie={kategorie} key={kategorie.id} />
             ) : <Line>등록된 카테고리가 없습니다</Line>}
 
             <Line top='true'>

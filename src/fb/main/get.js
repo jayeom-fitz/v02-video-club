@@ -42,3 +42,17 @@ export async function getKategories(active) {
   
   return data;
 }
+
+// 카테고리 아이디 중복 체크
+export async function isDuplicatedByKategorieId(id) {
+  var check = false;
+
+  await storeService.collection('main').doc('kategorie').collection('kategories')
+    .doc(id).get().then(function (doc) {
+      if(doc.exists) {
+        check = true;
+      }
+    })
+  
+  return check;
+}
