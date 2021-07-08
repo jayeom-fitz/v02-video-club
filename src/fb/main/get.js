@@ -32,7 +32,7 @@ export async function getKategories(active) {
   var data = [];
 
   await storeService.collection('main').doc('kategorie').collection('kategories')
-    .where('active', '==', active).get().then(function (snapshot) {
+    .where('active', '==', active).orderBy('number', 'asc').get().then(function (snapshot) {
       snapshot.forEach(function (doc) {
         data.push({
           id : doc.id, ...doc.data()
@@ -55,4 +55,18 @@ export async function isDuplicatedByKategorieId(id) {
     })
   
   return check;
+}
+
+// 카테고리 사이즈 가져오기
+export async function getKategorieSizeByActive(active) {
+  var size = 0;
+
+  await storeService.collection('main').doc('kategorie').collection('kategories')
+    .where('active', '==', active).get().then(function (snapshot) {
+      if(!snapshot.empty) {
+        size = snapshot.size;
+      }
+    })
+  
+  return size;
 }

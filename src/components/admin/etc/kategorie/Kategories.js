@@ -9,13 +9,14 @@ import Loading from 'components/effect/Loading';
 import { dateToString } from 'components/effect/function/func_time';
 import { lineFeedDecoding } from 'components/effect/function/func_str';
 
-import { getKategories, isDuplicatedByKategorieId } from 'fb/main/get';
-import { registKategorie } from 'fb/main/set';
+import { getKategories, getKategorieSizeByActive, isDuplicatedByKategorieId } from 'fb/main/get';
+import { registKategorie, setChangeNumberKategorie } from 'fb/main/set';
 
 function Kategories(props) {
   const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState(true);
   const [kategories, setKategories] = useState([]);
+  const [change, setChange] = useState(0);
 
   const [kid, setKid] = useState('');
   const [kname, setKname] = useState('');
@@ -28,7 +29,7 @@ function Kategories(props) {
 
   useEffect(() => {
     getKategoriesData();
-  }, [active])
+  }, [active, change])
 
   async function onSubmit() {
     if(kid.replace(/ /gi, '') === '') {
@@ -37,14 +38,16 @@ function Kategories(props) {
       document.getElementById('vc_kname').focus(); alert('카테고리명을 입력해주세요'); return;
     } 
 
-    var check = await isDuplicatedByKategorieId(kid);
+    const check = await isDuplicatedByKategorieId(kid);
 
     if(check) {
       document.getElementById('vc_kid').focus(); alert('중복된 아이디 입니다'); return;
     }
 
+    const number = await getKategorieSizeByActive(true) + 1;
+
     var data = {
-      name : kname, commentCount : 0, active : true, registDate : Date.now(),
+      name : kname, commentCount : 0, active : true, registDate : Date.now(), number,
       pid : props.user.uid, pimage: props.user.image, pname : props.user.name, plevel : props.user.level,
     };
 
@@ -56,6 +59,28 @@ function Kategories(props) {
       setKategories([...kategories, data])
     }
     setKid(''); setKname(''); alert('등록되었습니다.');
+  }
+
+  function straightNumber(data) {
+    var array = [];
+
+    for(var i=0; i<kategories.length; i++) {
+      if(kategories[i].id !== data.id) {
+        var k = kategories[i]; 
+        if(array.length === 0) k.number = 1;
+        else k.number = array[array.length - 1].number + 1;
+        array.push(k);
+      }
+    }
+
+    setKategories(array);
+  }
+
+  async function changeNumber(data, value) {
+    const number = data.number + value;
+    if(number === 0 || number === kategories.length) return;
+    await setChangeNumberKategorie(data, kategories[number - 1])
+    setChange(change + 1);
   }
 
   return (
@@ -76,16 +101,19 @@ function Kategories(props) {
 
           <div style={{paddingTop:'20px'}}>
             <Line top='true'>
-              <Column flex='0.2'>아이디</Column>
-              <Column flex='0.2'>카테고리명</Column>
+              <Column flex='0.1'>순번</Column>
+              <Column flex='0.1'>아이디</Column>
+              <Column flex='0.1'>카테고리명</Column>
               <Column flex='0.1'>코멘트 수</Column>
               <Column flex='0.2'>생성자</Column>
               <Column flex='0.2'>생성일</Column>
-              <Column flex='0.1'></Column>
+              <Column flex='0.2'></Column>
             </Line>
 
             {kategories.length !== 0 ? kategories.map((kategorie) => 
-              <Kategorie kategorie={kategorie} key={kategorie.id} />
+              <Kategorie kategorie={kategorie} key={kategorie.id} 
+                        changeNumber={changeNumber} straightNumber={straightNumber}
+              />
             ) : <Line>등록된 카테고리가 없습니다</Line>}
 
             <Line top='true'>
