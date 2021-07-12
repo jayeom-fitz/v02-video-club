@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from "react-router-dom";
 
 import styled, { css } from 'styled-components'
 
 import Kategorie from './Kategorie';
 
 import Loading from 'components/effect/Loading';
-import { dateToString } from 'components/effect/function/func_time';
-import { lineFeedDecoding } from 'components/effect/function/func_str';
 
 import { getKategories, getKategorieSizeByActive, isDuplicatedByKategorieId } from 'fb/main/get';
-import { registKategorie, setChangeNumberKategorie } from 'fb/main/set';
+import { registKategorie } from 'fb/main/set';
 
 function Kategories(props) {
   const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState(true);
   const [kategories, setKategories] = useState([]);
-  const [change, setChange] = useState(0);
 
   const [kid, setKid] = useState('');
   const [kname, setKname] = useState('');
@@ -24,12 +20,16 @@ function Kategories(props) {
   async function getKategoriesData() {
     var data = await getKategories(active);
 
-    setKategories(data); setLoaded(true);
+    setKategories(data);
+  }
+
+  async function init() {
+    await getKategoriesData(); setLoaded(true);
   }
 
   useEffect(() => {
-    getKategoriesData();
-  }, [active, change])
+    init();
+  }, [active])
 
   async function onSubmit() {
     if(kid.replace(/ /gi, '') === '') {
@@ -61,28 +61,6 @@ function Kategories(props) {
     setKid(''); setKname(''); alert('등록되었습니다.');
   }
 
-  function straightNumber(data) {
-    var array = [];
-
-    for(var i=0; i<kategories.length; i++) {
-      if(kategories[i].id !== data.id) {
-        var k = kategories[i]; 
-        if(array.length === 0) k.number = 1;
-        else k.number = array[array.length - 1].number + 1;
-        array.push(k);
-      }
-    }
-
-    setKategories(array);
-  }
-
-  async function changeNumber(data, value) {
-    const number = data.number + value;
-    if(number === 0 || number === kategories.length) return;
-    await setChangeNumberKategorie(data, kategories[number - 1])
-    setChange(change + 1);
-  }
-
   return (
     <div style={{width:'100%'}}>
       {loaded ? <>
@@ -110,11 +88,9 @@ function Kategories(props) {
               <Column flex='0.2'></Column>
             </Line>
 
-            {kategories.length !== 0 ? kategories.map((kategorie) => 
-              <Kategorie kategorie={kategorie} key={kategorie.id} 
-                        changeNumber={changeNumber} straightNumber={straightNumber}
-              />
-            ) : <Line>등록된 카테고리가 없습니다</Line>}
+            <Kategorie kategories={kategories} setKategories={setKategories} 
+                      getKategoriesData={getKategoriesData}
+            />
 
             <Line top='true'>
               <Column flex='0.2'>

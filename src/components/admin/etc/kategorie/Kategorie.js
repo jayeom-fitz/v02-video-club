@@ -6,43 +6,71 @@ import User from 'components/effect/User';
 
 import { dateToString } from 'components/effect/function/func_time';
 
-import { toggleKategorieActive } from 'fb/main/set';
+import { setChangeNumberKategorie, toggleKategorieActive } from 'fb/main/set';
 
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai'
 
 function Kategorie(props) {
-  async function toggleActive() {
-    await toggleKategorieActive(props.kategorie.id, !props.kategorie.active); 
-    props.straightNumber(props.kategorie);
+  function straightNumber(data) {
+    var array = [];
+
+    for(var i=0; i<props.kategories.length; i++) {
+      if(props.kategories[i].id !== data.id) {
+        var k = props.kategories[i]; 
+        if(array.length === 0) k.number = 1;
+        else k.number = array[array.length - 1].number + 1;
+        array.push(k);
+      }
+    }
+
+    props.setKategories(array);
+  }
+
+  async function toggleActive(kategorie) {
+    await toggleKategorieActive(kategorie.id, !kategorie.active); 
+    straightNumber(kategorie);
     alert('처리되었습니다');
+  }
+
+  async function changeNumber(data, value) {
+    const number = data.number + value; 
+    
+    if(number === 0 || number > props.kategories.length) return; 
+
+    await setChangeNumberKategorie(data, props.kategories[number - 1]);
+    
+    await props.getKategoriesData();
   }
 
   return (
     <>
-      <Line>
-        <Column flex='0.1'>{props.kategorie.number}</Column>
-        <Column flex='0.1'>{props.kategorie.id}</Column>
-        <Column flex='0.1'>{props.kategorie.name}</Column>
-        <Column flex='0.1'>{props.kategorie.commentCount}</Column>
-        <Column flex='0.2'>
-          <User
-            pid={props.kategorie.pid}
-            pimage={props.kategorie.pimage} 
-            pname={props.kategorie.pname} 
-            plevel={props.kategorie.plevel}
-            admin={true}/>
-        </Column>
-        <Column flex='0.2'>{dateToString(props.kategorie.registDate)}</Column>
-        <Column flex='0.2'>
-          <ArrowButton onClick={async () => await props.changeNumber(props.kategorie, -1)}>
-            <AiOutlineArrowUp size='16' />
-          </ArrowButton>
-          <ArrowButton onClick={async () => await props.changeNumber(props.kategorie, 1)}>
-            <AiOutlineArrowDown size='16' />
-          </ArrowButton>
-          <Button onClick={() => toggleActive()}>{props.kategorie.active ? '금지' : '복구'}</Button>
-        </Column>
-      </Line>
+      {props.kategories.length !== 0 ? 
+        props.kategories.map((kategorie) => 
+          <Line key={`vc_kategorie_${kategorie.id}`}>
+            <Column flex='0.1'>{kategorie.number}</Column>
+            <Column flex='0.1'>{kategorie.id}</Column>
+            <Column flex='0.1'>{kategorie.name}</Column>
+            <Column flex='0.1'>{kategorie.commentCount}</Column>
+            <Column flex='0.2'>
+              <User
+                pid={kategorie.pid}
+                pimage={kategorie.pimage} 
+                pname={kategorie.pname} 
+                plevel={kategorie.plevel}
+                admin={true}/>
+            </Column>
+            <Column flex='0.2'>{dateToString(kategorie.registDate)}</Column>
+            <Column flex='0.2'>
+              <ArrowButton onClick={async () => await changeNumber(kategorie, -1)}>
+                <AiOutlineArrowUp size='16' />
+              </ArrowButton>
+              <ArrowButton onClick={async () => await changeNumber(kategorie, 1)}>
+                <AiOutlineArrowDown size='16' />
+              </ArrowButton>
+              <Button onClick={() => toggleActive(kategorie)}>{kategorie.active ? '금지' : '복구'}</Button>
+            </Column>
+          </Line>
+      ) : <Line>등록된 카테고리가 없습니다</Line>}
     </>
   )
 }

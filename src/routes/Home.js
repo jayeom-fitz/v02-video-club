@@ -15,6 +15,7 @@ function Home(props) {
     switch(prop) {
       case 'board': return <Board user={props.user} />
 
+      case 'home' : return <Main user={props.user} />
       default : return <Main user={props.user} />
     }
   }
