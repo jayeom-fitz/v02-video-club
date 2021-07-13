@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useParams } from "react-router-dom";
 
 import styled from 'styled-components'
 
@@ -9,6 +10,8 @@ import { writeCommentPosting } from 'fb/comment/set';
 import { setCommentCountUp } from 'fb/video/set';
 
 function Write(props) {
+  const { property1 } = useParams();
+
   const [link, setLink] = useState('');
   const [linkInput, setLinkInput] = useState('');
   const [content, setContent] = useState('');
@@ -45,7 +48,7 @@ function Write(props) {
       ups : 0, active : true, replyCount : 0, reply : false, 
       pid : props.user.uid, pname : props.user.name, 
       pimage : props.user.image, plevel : props.user.level,
-      registDate : Date.now()
+      registDate : Date.now(), kategorie : property1
     };
 
     data = await writeCommentPosting(data);

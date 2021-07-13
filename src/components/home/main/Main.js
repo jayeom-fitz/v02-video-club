@@ -8,14 +8,15 @@ import Write from './content/Write';
 import List from './content/List';
 
 function Main(props) {
-  const { pageName } = useParams();
+  const { property1 } = useParams();
 
   const [comments, setComments] = useState([]);
 
-  const switchComponent = (prop) => {
-    switch(prop) {
+  const switchComponent = () => {
+    switch(property1) {
       case undefined : 
-      case 'recommended' : return false;
+      case 'best' : 
+      case 'hot' : return false;
 
       default : return true;
     }
@@ -25,7 +26,7 @@ function Main(props) {
     <Container>
       <Kategories />
 
-      {props.user && switchComponent(pageName) &&
+      {props.user && switchComponent() &&
         <Write user={props.user} 
               comments={comments} setComments={setComments} /> 
       }
@@ -40,5 +41,5 @@ export default Main
 const Container = styled.div`
   width: 100%;
   padding: 20px 50px;
-  background-color: #ddd;
+  background-color: #eee;
 `

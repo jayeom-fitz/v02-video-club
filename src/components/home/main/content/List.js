@@ -3,16 +3,29 @@ import { useParams } from "react-router-dom";
 
 import styled from 'styled-components'
 
-import { getRecentlyComments } from 'fb/comment/get';
+import { getRecentlyComments, getRecentlyCommentsByKategorie } from 'fb/comment/get';
 
 import Comment from './Comment';
 
 function List(props) {
+  const { property1 } = useParams();
+
   const [loaded, setLoaded] = useState(false);
 
   async function getComments() {
-    var data = await getRecentlyComments();
-    props.setComments(data);
+    var array
+
+    switch(property1) {
+      case undefined : array = await getRecentlyComments(); break;
+
+      case 'best' : array = []; break;
+
+      case 'hot' : array = []; break;
+
+      default : array = await getRecentlyCommentsByKategorie(property1); break;
+    }
+
+    props.setComments(array);
   }
 
   async function init() {
@@ -22,7 +35,7 @@ function List(props) {
   
   useEffect(() => {
     init();
-  }, [])
+  }, [property1])
 
   return (
     <Container>

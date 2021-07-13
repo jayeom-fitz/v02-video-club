@@ -6,7 +6,6 @@ import User from 'components/effect/User'
 import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_video'
 
 function Comment(props) {
-  console.log(props.comment)
   return (
     <Container>
       <Content>
