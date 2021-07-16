@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import Kategories from './content/Kategories';
 import Write from './content/Write';
 import List from './content/List';
+import More from './content/More';
 
 function Main(props) {
   const { property1 } = useParams();
@@ -32,6 +33,8 @@ function Main(props) {
       }
 
       <List comments={comments} setComments={setComments} />
+
+      <More comments={comments} setComments={setComments} />
     </Container>
   )
 }

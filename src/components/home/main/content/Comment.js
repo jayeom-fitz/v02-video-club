@@ -4,23 +4,31 @@ import styled from 'styled-components'
 
 import User from 'components/effect/User'
 import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_video'
+import { lineFeedDecoding } from 'components/effect/function/func_str'
 
 function Comment(props) {
   return (
     <Container>
       <Content>
-        <Box flex='0.5'>
+        <Box flex='0.5' style={{alignItems: 'center'}}>
           <ImageBox>
             <Image src={getImageLinkByIdAndPlatform(props.comment.linkId, props.comment.platform)} />
           </ImageBox>
         </Box>
 
         <Box flex='0.5'>
-          <User
-            pid={props.comment.pid}
-            pimage={props.comment.pimage} 
-            pname={props.comment.pname} 
-            plevel={props.comment.plevel}/>
+          <div>
+            <User
+              pid={props.comment.pid}
+              pimage={props.comment.pimage} 
+              pname={props.comment.pname} 
+              plevel={props.comment.plevel}/>
+
+            <Text>
+              <Pre>{lineFeedDecoding(props.comment.content)}</Pre>
+            </Text>
+
+          </div>
         </Box>
 
       </Content>
@@ -31,14 +39,14 @@ function Comment(props) {
 export default Comment
 
 const Container = styled.div`
-  width: 80%;
+  width: 60%;
   margin: 20px auto;
   border: 1px solid lightgrey;
   box-shadow: 5px 5px 5px grey;
+  background-color: white;
 `
 const Content = styled.div`
   display: flex;
-  align-items: center;
 `
 const Box = styled.div`
   flex: ${(props) => props.flex || 1};
@@ -47,14 +55,22 @@ const Box = styled.div`
 const ImageBox = styled.div`
   position: relative;
   width: 100%;
-  padding-bottom: 56.26%;
+  padding-bottom: 75%;
 `
 const Image = styled.img`
   position: absolute;
   width: 100%;
   height: 100%;
 `
-
+const Text = styled.div`
+  width: 80%;
+  padding: 10px 5px;
+  margin: 5px auto;
+`
+const Pre = styled.pre`
+  line-height: 150%;
+  white-space: pre-wrap;
+`
 
 const InputBox = styled.div`
   width: 100%;

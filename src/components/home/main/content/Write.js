@@ -8,6 +8,7 @@ import { getVideoLinkByIdAndPlatform, getVideoIdByLink } from 'components/effect
 
 import { writeCommentPosting } from 'fb/comment/set';
 import { setCommentCountUp } from 'fb/video/set';
+import { lineFeedEncoding } from 'components/effect/function/func_str';
 
 function Write(props) {
   const { property1 } = useParams();
@@ -44,7 +45,7 @@ function Write(props) {
     }
 
     var data = {
-      linkId : id, platform, content, 
+      linkId : id, platform, content : lineFeedEncoding(content), 
       ups : 0, active : true, replyCount : 0, reply : false, 
       pid : props.user.uid, pname : props.user.name, 
       pimage : props.user.image, plevel : props.user.level,
