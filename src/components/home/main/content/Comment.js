@@ -7,12 +7,26 @@ import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_vid
 import { lineFeedDecoding } from 'components/effect/function/func_str'
 
 function Comment(props) {
+
+  function imageClick() {
+    props.setVideo({
+      id : props.comment.linkId,
+      platform : props.comment.platform
+    })
+
+    if(document.getElementById("vc_video_box").style.display !== 'flex')
+      document.getElementById("vc_video_box").style.display = "flex";
+  }
+
   return (
     <Container>
       <Content>
         <Box flex='0.5' style={{alignItems: 'center'}}>
           <ImageBox>
-            <Image src={getImageLinkByIdAndPlatform(props.comment.linkId, props.comment.platform)} />
+            <Image 
+              src={getImageLinkByIdAndPlatform(props.comment.linkId, props.comment.platform)} 
+              onClick={() => imageClick()}
+            />
           </ImageBox>
         </Box>
 
@@ -61,6 +75,7 @@ const Image = styled.img`
   position: absolute;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 `
 const Text = styled.div`
   width: 80%;

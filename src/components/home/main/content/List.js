@@ -40,7 +40,7 @@ function List(props) {
   return (
     <Container>
       {loaded && props.comments && props.comments.map((comment) => 
-        <Comment key={comment.id} comment={comment}/>)
+        <Comment key={comment.id} comment={comment} setVideo={props.setVideo} />)
       }
     </Container>
   )

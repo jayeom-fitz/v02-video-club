@@ -7,10 +7,12 @@ import Kategories from './content/Kategories';
 import Write from './content/Write';
 import List from './content/List';
 import More from './content/More';
+import Video from './content/Video';
 
 function Main(props) {
   const { property1 } = useParams();
 
+  const [video, setVideo] = useState({});
   const [comments, setComments] = useState([]);
 
   const switchComponent = () => {
@@ -25,6 +27,8 @@ function Main(props) {
 
   return (
     <Container>
+      <Video video={video} />
+
       <Kategories />
 
       {props.user && switchComponent() &&
@@ -32,7 +36,8 @@ function Main(props) {
               comments={comments} setComments={setComments} /> 
       }
 
-      <List comments={comments} setComments={setComments} />
+      <List comments={comments} setComments={setComments} 
+            setVideo={setVideo} />
 
       <More comments={comments} setComments={setComments} />
     </Container>
