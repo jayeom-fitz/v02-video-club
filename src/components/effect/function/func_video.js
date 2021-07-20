@@ -20,10 +20,10 @@ exports.getVideoIdByLink = function (link) {
   } else return null;
 }
 
-exports.getVideoLinkByIdAndPlatform = function (id, platform) {
+exports.getVideoLinkForIframeByIdAndPlatform = function (id, platform) {
   switch(platform) {
     case 'youtube' : 
-      return `https://www.youtube.com/embed/${id}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1`;
     default :
       return null;
   }
@@ -33,6 +33,15 @@ exports.getImageLinkByIdAndPlatform = function (id, platform) {
   switch(platform) {
     case 'youtube' : 
       return `http://img.youtube.com/vi/${id}/0.jpg`;
+    default :
+      return null;
+  }
+}
+
+exports.getVideoLinkByIdAndPlatform = function (id, platform) {
+  switch(platform) {
+    case 'youtube' : 
+      return `https://www.youtube.com/watch?v=${id}`;
     default :
       return null;
   }

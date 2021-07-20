@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { ImCross, ImPlus, ImMinus } from 'react-icons/im'
-import { getVideoLinkByIdAndPlatform } from 'components/effect/function/func_video';
+import { getVideoLinkForIframeByIdAndPlatform } from 'components/effect/function/func_video';
 
 function Video(props) {
   const MIN_SIZE = 360;
@@ -19,7 +19,7 @@ function Video(props) {
     <Container id='vc_video_box'>
       <VideoBox size={`${size}px`}>
         <Iframe 
-          src={getVideoLinkByIdAndPlatform(props.video.id, props.video.platform)}   
+          src={getVideoLinkForIframeByIdAndPlatform(props.video.id, props.video.platform)}   
           frameBorder='0'
           allowFullScreen />
       </VideoBox>
