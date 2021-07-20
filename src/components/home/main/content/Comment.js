@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -6,17 +6,15 @@ import User from 'components/effect/User'
 import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_video'
 import { lineFeedDecoding } from 'components/effect/function/func_str'
 
-import { GoThumbsup } from 'react-icons/go'
-import { ImBubble } from 'react-icons/im'
-import { RiExternalLinkLine } from 'react-icons/ri'
 import Buttons from './Buttons';
 
 function Comment(props) {
+  const [comment, setComment] = useState(props.comment);
 
   function imageClick() {
     props.setVideo({
-      id : props.comment.linkId,
-      platform : props.comment.platform
+      id : comment.linkId,
+      platform : comment.platform
     })
 
     if(document.getElementById("vc_video_box").style.display !== 'flex')
@@ -29,7 +27,7 @@ function Comment(props) {
         <Box flex='0.5' style={{alignItems: 'center'}}>
           <ImageBox>
             <Image 
-              src={getImageLinkByIdAndPlatform(props.comment.linkId, props.comment.platform)} 
+              src={getImageLinkByIdAndPlatform(comment.linkId, comment.platform)} 
               onClick={() => imageClick()}
             />
           </ImageBox>
@@ -38,13 +36,13 @@ function Comment(props) {
         <Box flex='0.5'>
           <div>
             <User
-              pid={props.comment.pid}
-              pimage={props.comment.pimage} 
-              pname={props.comment.pname} 
-              plevel={props.comment.plevel}/>
+              pid={comment.pid}
+              pimage={comment.pimage} 
+              pname={comment.pname} 
+              plevel={comment.plevel}/>
 
             <Text>
-              <Pre>{lineFeedDecoding(props.comment.content)}</Pre>
+              <Pre>{lineFeedDecoding(comment.content)}</Pre>
             </Text>
 
           </div>
@@ -52,7 +50,8 @@ function Comment(props) {
 
       </Content>
 
-      <Buttons comment={props.comment} user={props.user} />
+      <Buttons comment={comment} setComment={setComment}
+              user={props.user} />
 
     </Container>
   )

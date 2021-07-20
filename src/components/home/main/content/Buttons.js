@@ -1,13 +1,39 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import styled from 'styled-components'
 
 import { GoThumbsup } from 'react-icons/go'
 import { ImBubble } from 'react-icons/im'
 import { RiExternalLinkLine } from 'react-icons/ri'
+
 import { getVideoLinkByIdAndPlatform } from 'components/effect/function/func_video';
 
+import { isClickedRecommend } from 'fb/comment/get'
+import { commentRecommend } from 'fb/comment/set'
+
 function Buttons(props) {
+  const [loaded, setLoaded] = useState(false);
+  const [recommend, setRecommend] = useState(false);
+
+  async function checkRecommend() {
+    if(props.user === undefined) return;
+
+    const data = await isClickedRecommend(props.comment.id, props.user.uid);
+    
+    setRecommend(data); setLoaded(true);
+  }
+
+  useEffect(() => {
+    checkRecommend(); 
+  }, [])
+
+  async function onRecommendClick() {
+    if(recommend) return;
+
+    const data = await commentRecommend(props.comment, props.user.uid);
+    
+    props.setComment(data); setRecommend(true);
+  }
 
   function onLinkClick() {
     const link = getVideoLinkByIdAndPlatform(props.comment.linkId, props.comment.platform);
@@ -19,15 +45,21 @@ function Buttons(props) {
   return (
     <Container>
       <Button>
+      {loaded &&
         <ButtonBox>
-          <ButtonContent>
+          <ButtonContent onClick={() => onRecommendClick()}>
             <ButtonIcon>
-              <GoThumbsup size='20' color='grey' style={{verticalAlign: 'middle', paddingBottom: '5px'}}/>
+              <GoThumbsup size='20' 
+                color={recommend ? '#0f52ba' : 'grey'} 
+                style={{verticalAlign: 'middle', paddingBottom: '5px'}}/>
             </ButtonIcon>
         
-            <ButtonText> 추천 </ButtonText>
+            <ButtonText color={recommend ? '#0f52ba' : 'grey'}> 추천 {
+              props.comment.ups !== 0 && props.comment.ups
+            }</ButtonText>
           </ButtonContent>
         </ButtonBox>
+      }
       </Button>
 
       <Button>
@@ -80,7 +112,9 @@ const ButtonIcon = styled.div`
   height: 100%;
 `
 const ButtonText = styled.div`
-  color: grey;
+  color: ${(props) => props.color || 'grey'};
   font-weight: 800;
   padding-left: 10px;
 `
+
+// #0f52ba sapphire

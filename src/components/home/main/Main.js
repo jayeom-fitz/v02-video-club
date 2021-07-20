@@ -37,7 +37,8 @@ function Main(props) {
       }
 
       <List comments={comments} setComments={setComments} 
-            setVideo={setVideo} />
+            setVideo={setVideo}
+            user={props.user} />
 
       <More comments={comments} setComments={setComments} />
     </Container>

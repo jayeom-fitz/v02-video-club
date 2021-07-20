@@ -72,3 +72,28 @@ export async function getMoreRecentlyCommentsByKategorie(kategorie, registDate) 
   
   return data;
 }
+
+// 좋아요 눌렀는지 체크
+export async function isClickedRecommend(commentId, userId) {
+  var check;
+
+  await storeService.collection('comment').doc(commentId)
+    .collection('recommended').doc(userId)
+    .get().then(function (doc) {
+      check = doc.exists;
+    })
+  
+  return check;
+}
+
+// 추천 수 가져오기
+export async function getRecommendCount(id) {
+  var count;
+
+  await storeService.collection('comment').doc(id)
+    .get().then(function (doc) {
+      count = doc.data().ups;
+    })
+  
+  return count;
+}
