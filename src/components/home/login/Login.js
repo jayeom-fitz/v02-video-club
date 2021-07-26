@@ -67,12 +67,12 @@ function Login() {
             <Text>깃허브 로그인</Text>
           </LoginButton>
 
-          <LoginButton 
+          {/* <LoginButton 
             onClick={() => onSocialClick('facebook')}
             bgColor='#3b5998' color='#fff'>
             <Icon><AiFillFacebook size='24'/></Icon>
             <Text>페이스북 로그인</Text>
-          </LoginButton>
+          </LoginButton> */}
         </div>
 
         <CancleButton onClick={() => document.getElementById('vc_login_frame').style.display = 'none'}>

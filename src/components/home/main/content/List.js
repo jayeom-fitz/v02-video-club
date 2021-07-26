@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { getRecentlyComments, getRecentlyCommentsByKategorie } from 'fb/comment/get';
 
-import Comment from './Comment';
+import Comment from './comment/Comment';
 
 function List(props) {
   const { property1 } = useParams();

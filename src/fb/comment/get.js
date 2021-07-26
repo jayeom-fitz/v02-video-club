@@ -97,3 +97,15 @@ export async function getRecommendCount(id) {
   
   return count;
 }
+
+// 댓글 갯수 가져오기
+export async function getReplyCount(id) {
+  var data;
+  
+  await storeService.collection('comment').doc(id)
+    .get().then(function (doc) {
+      data = doc.data().replyCount
+    })
+
+  return data;
+}

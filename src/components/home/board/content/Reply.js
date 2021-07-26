@@ -32,8 +32,6 @@ function Reply(props) {
 
     replyData.id = await writeReply(replyData);
 
-    await setUserPointUp(props.user.uid, 1);
-
     var data = props.board;
 
     await updateReplyCount(property2, 1);

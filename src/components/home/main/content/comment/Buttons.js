@@ -16,11 +16,11 @@ function Buttons(props) {
   const [recommend, setRecommend] = useState(false);
 
   async function checkRecommend() {
-    if(props.user === undefined) return;
-
-    const data = await isClickedRecommend(props.comment.id, props.user.uid);
-    
-    setRecommend(data); setLoaded(true);
+    if(!(props.user === null || props.user === undefined)) {
+      const data = await isClickedRecommend(props.comment.id, props.user.uid);
+      setRecommend(data);
+    }    
+     setLoaded(true);
   }
 
   useEffect(() => {
@@ -50,11 +50,11 @@ function Buttons(props) {
           <ButtonContent onClick={() => onRecommendClick()}>
             <ButtonIcon>
               <GoThumbsup size='20' 
-                color={recommend ? '#0f52ba' : 'grey'} 
+                color={recommend ? '#f70d1a' : 'grey'} 
                 style={{verticalAlign: 'middle', paddingBottom: '5px'}}/>
             </ButtonIcon>
         
-            <ButtonText color={recommend ? '#0f52ba' : 'grey'}> 추천 {
+            <ButtonText color={recommend ? '#f70d1a' : 'grey'}> 추천 {
               props.comment.ups !== 0 && props.comment.ups
             }</ButtonText>
           </ButtonContent>
@@ -64,12 +64,14 @@ function Buttons(props) {
 
       <Button>
         <ButtonBox>
-          <ButtonContent>
+          <ButtonContent onClick={() => props.setActiveReply(true)}>
             <ButtonIcon>
               <ImBubble size='20' color='grey' style={{verticalAlign: 'middle', paddingBottom: '5px'}}/>
             </ButtonIcon>
       
-            <ButtonText> 댓글 </ButtonText>
+            <ButtonText> 댓글 {
+              props.comment.replyCount !== 0 && `${props.comment.replyCount} 개`
+            }</ButtonText>
           </ButtonContent>
         </ButtonBox>
       </Button>
@@ -101,7 +103,7 @@ const Button = styled.div`
   line-height: 40px;
 `
 const ButtonBox = styled.div`
-  width: 40%;
+  width: 50%;
   margin: auto;
 `
 const ButtonContent = styled.div`
@@ -117,4 +119,4 @@ const ButtonText = styled.div`
   padding-left: 10px;
 `
 
-// #0f52ba sapphire
+// #f70d1a ferrari red

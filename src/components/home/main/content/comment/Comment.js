@@ -7,9 +7,11 @@ import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_vid
 import { lineFeedDecoding } from 'components/effect/function/func_str'
 
 import Buttons from './Buttons';
+import ReplyList from './ReplyList'
 
 function Comment(props) {
   const [comment, setComment] = useState(props.comment);
+  const [activeReply, setActiveReply] = useState(false);
 
   function imageClick() {
     props.setVideo({
@@ -51,8 +53,12 @@ function Comment(props) {
       </Content>
 
       <Buttons comment={comment} setComment={setComment}
-              user={props.user} />
+              user={props.user}
+              setActiveReply={setActiveReply} />
 
+      {activeReply && 
+        <ReplyList user={props.user} comment={comment} />
+      }
     </Container>
   )
 }

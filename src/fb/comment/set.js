@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { storeService } from '../f'
-import { getRecommendCount } from './get';
+import { getRecommendCount, getReplyCount } from './get';
 
 import { setUserPointUp } from 'fb/users/set';
 
@@ -31,4 +31,15 @@ export async function commentRecommend(data, uid) {
   setUserPointUp(data.pid, 1);
   
   return data;
+}
+
+// 게시글 댓글 수 변화
+export async function updateReplyCount(id, value) { 
+  var count = await getReplyCount(id);
+  count = count + value;
+
+  await storeService.collection('comment').doc(id)
+    .update({
+      replyCount: count
+    })
 }
