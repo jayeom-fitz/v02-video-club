@@ -20,8 +20,7 @@ function ReplyWrite(props) {
   }
 
   async function onKeyDown(e) {
-    if((e.code === 'Enter' || e.code === 'NumpadEnter') 
-        && (code !== 'ShiftLeft' || code !== 'NumpadEnter' || code !== 'Enter')) {
+    if(e.code === 'Enter') {
       await write(); setReply(''); setCode('');
     } else {
       setCode(e.code);

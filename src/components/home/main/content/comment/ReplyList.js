@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react'
 
 import styled from 'styled-components'
-import Reply from './Reply';
 
+import Reply from './Reply';
 import ReplyWrite from './ReplyWrite'
+
+import { lineFeedDecoding } from 'components/effect/function/func_str';
+import { getReplysByPostId } from 'fb/reply/get';
 
 function ReplyList(props) {
   const [replys, setReplys] = useState([]);
 
   async function getReplys() {
+    var data = await getReplysByPostId(props.comment.id);
 
+    for(var i=0; i<data.length; i++) {
+      data[i].content = lineFeedDecoding(data[i].content);
+    }
+
+    setReplys(data);
   }
 
   useEffect(() => {
