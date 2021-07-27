@@ -7,6 +7,7 @@ import ReplyWrite from './ReplyWrite'
 
 import { lineFeedDecoding } from 'components/effect/function/func_str';
 import { getReplysByPostId } from 'fb/reply/get';
+import { deleteReply } from 'fb/reply/set';
 
 function ReplyList(props) {
   const [replys, setReplys] = useState([]);
@@ -25,6 +26,20 @@ function ReplyList(props) {
     getReplys();
   }, [])
 
+  async function onDeleteReply(id) {   
+    var array = [];
+
+    for(var i=0; i<replys.length; i++) {
+      if(id !== replys[i].id) {
+        array.push(replys[i]);
+      } 
+    }
+
+    await deleteReply(id);
+    alert('삭제되었습니다.');
+    setReplys(array); 
+  }
+
   return (
     <Container>
       {props.user && 
@@ -33,7 +48,9 @@ function ReplyList(props) {
       }
 
       {replys.length !== 0 && replys.map((reply) => 
-        <Reply reply={reply} />
+        <Reply  key={reply.id} 
+              user={props.user} 
+              reply={reply} onDeleteReply={onDeleteReply} />
       )}
     </Container>
   )

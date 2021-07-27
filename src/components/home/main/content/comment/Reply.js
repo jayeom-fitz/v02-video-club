@@ -7,6 +7,7 @@ import { dateToString2 } from 'components/effect/function/func_time';
 
 import Avatar from "@material-ui/core/Avatar";
 
+import { FiEdit2 } from 'react-icons/fi'
 import { ImCross } from 'react-icons/im'
 import { GoThumbsup } from 'react-icons/go'
 
@@ -26,24 +27,25 @@ function Reply(props) {
               {reply.pname}
             </StyledLink>
           </Name>
-
-          {/* {props.user && ( props.user.uid === props.comment.uid || props.user.verified===2 ) && 
+                 
+          {props.user && (props.user.uid === props.reply.pid || props.user.level >= 1) &&
           <div style={{verticalAlign:'middle'}}>
-            <StyledImCross size='12' onClick={() => props.onDeleteComment(props.comment.id)}/>
-          </div>} */}
-          
+            <StyledFiEdit size='12' />
+          </div>}
+
+          {props.user && (props.user.uid === props.reply.pid || props.user.level >= 1) &&
+          <div style={{verticalAlign:'middle'}}>
+            <StyledImCross size='12' onClick={() => props.onDeleteReply(reply.id)}/>
+          </div>}
+
+          <div style={{verticalAlign:'middle'}}>
+            <StyledGoThumbsup size='12'/>
+          </div>
 
           <WriteDate>
             {dateToString2(reply.registDate)}
           </WriteDate>
           
-          <div style={{verticalAlign:'middle'}}>
-            <StyledImCross size='12'/>
-          </div>
-
-          <div style={{verticalAlign:'middle'}}>
-            <StyledGoThumbsup size='12'/>
-          </div>
         </div>
 
         <div>
@@ -87,6 +89,12 @@ const Content = styled.pre`
   white-space: pre-wrap;
   word-break: break-all;
   margin-top: 5px;
+`
+const StyledFiEdit = styled(FiEdit2)`
+  color: grey;
+  padding-right: 10px;
+  margin: 0;
+  cursor: pointer;
 `
 const StyledImCross = styled(ImCross)`
   color: grey;
