@@ -1,18 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 
 import styled from "styled-components";
 
 import { dateToString2 } from 'components/effect/function/func_time';
 
+import { isClikedLike } from 'fb/reply/get';
+
 import Avatar from "@material-ui/core/Avatar";
 
 import { FiEdit2 } from 'react-icons/fi'
 import { ImCross } from 'react-icons/im'
 import { GoThumbsup } from 'react-icons/go'
+import { replyRecommend } from 'fb/reply/set';
 
 function Reply(props) {
   const [reply, setReply] = useState(props.reply)
+  
+  const [loaded, setLoaded] = useState(false);
+  const [recommend, setRecommend] = useState(false);
+
+  async function checkRecommend() {
+    if(!(props.user === null || props.user === undefined)) {
+      const data = await isClikedLike(reply.id, props.user.uid);
+      setRecommend(data);
+    }    
+     setLoaded(true);
+  }
+
+  useEffect(() => {
+    checkRecommend(); 
+  }, [])
+
+  async function onRecommendClick() {
+    if(recommend) return;
+
+    const data = await replyRecommend(reply, props.user.uid);
+    
+    setReply(data); setRecommend(true);
+  }
 
   return (
     <Container>
@@ -39,7 +65,12 @@ function Reply(props) {
           </div>}
 
           <div style={{verticalAlign:'middle'}}>
-            <StyledGoThumbsup size='12'/>
+            <StyledGoThumbsup size='12' color={recommend ? '#f70d1a' : 'grey'}
+                              onClick={() => onRecommendClick()}/> 
+                              
+            {reply.ups !== 0 && 
+              <UpCount>{reply.ups}</UpCount>
+            }
           </div>
 
           <WriteDate>
@@ -103,8 +134,13 @@ const StyledImCross = styled(ImCross)`
   cursor: pointer;
 `
 const StyledGoThumbsup = styled(GoThumbsup)`
-  color: grey;
+  color: ${(props) => props.color};
   padding-right: 10px;
   margin: 0;
   cursor: pointer;
+`
+const UpCount = styled.span`
+  color: #f70d1a;
+  padding-right: 10px;
+  font-size: 0.9rem;
 `

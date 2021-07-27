@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { storeService } from '../f'
+import { getReplyUps } from './get';
+import { setUserPointUp } from 'fb/users/set';
 
 // 댓글 작성
 export async function writeReply(data) {
@@ -42,4 +44,17 @@ export async function addReplyUpClickedUser(rid, pid) {
     .doc(pid).set({
       clickedDate: Date.now()
     })
+}
+
+// 추천
+export async function replyRecommend(data, uid) {
+  data.ups = await getReplyUps(data.id) + 1;
+
+  await updateReplyUps(data.id, data.ups);
+
+  await addReplyUpClickedUser(data.id, uid);
+
+  setUserPointUp(data.pid, 1);
+  
+  return data;
 }
