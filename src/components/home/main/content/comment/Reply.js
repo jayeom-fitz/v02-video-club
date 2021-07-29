@@ -4,16 +4,18 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { dateToString2 } from 'components/effect/function/func_time';
+import { lineFeedEncoding } from 'components/effect/function/func_str';
+import ReportButton from 'components/effect/ReportButton';
 
 import { isClikedLike } from 'fb/reply/get';
+import { replyRecommend, updateReplyContent } from 'fb/reply/set';
 
 import Avatar from "@material-ui/core/Avatar";
 
 import { FiEdit2 } from 'react-icons/fi'
 import { ImCross } from 'react-icons/im'
 import { GoThumbsup } from 'react-icons/go'
-import { replyRecommend, updateReplyContent } from 'fb/reply/set';
-import { lineFeedEncoding } from 'components/effect/function/func_str';
+
 
 function Reply(props) {
   const [reply, setReply] = useState(props.reply)
@@ -85,13 +87,20 @@ function Reply(props) {
                               onClick={() => onRecommendClick()}/> 
                               
             {reply.ups !== 0 && 
-              <UpCount>{reply.ups}</UpCount>
+              <UpCount color={recommend ? '#f70d1a' : 'grey'}>{reply.ups}</UpCount>
             }
           </div>
 
           <WriteDate>
             {dateToString2(reply.registDate)}
           </WriteDate>
+          
+          <div style={{paddingLeft:'20px'}}>
+            <ReportButton 
+                user={props.user} 
+                collection='reply' 
+                docId={reply.id} />
+          </div>
           
         </div>
 
@@ -162,7 +171,7 @@ const StyledGoThumbsup = styled(GoThumbsup)`
   cursor: pointer;
 `
 const UpCount = styled.span`
-  color: #f70d1a;
+  color: ${(props) => props.color};
   padding-right: 10px;
   font-size: 0.9rem;
 `

@@ -45,6 +45,8 @@ function Login() {
     await storeService.collection("users").doc(data.user.uid).update({
       lastLoginDate : Date.now(),
     });
+
+    window.location.reload();
   }
 
   return (

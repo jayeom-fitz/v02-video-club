@@ -3,8 +3,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import User from 'components/effect/User'
+import ReportButton from 'components/effect/ReportButton'
 import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_video'
 import { lineFeedDecoding } from 'components/effect/function/func_str'
+import { dateToString2 } from 'components/effect/function/func_time'
 
 import Buttons from './Buttons';
 import ReplyList from './ReplyList'
@@ -37,11 +39,25 @@ function Comment(props) {
 
         <Box flex='0.5'>
           <div>
-            <User
-              pid={comment.pid}
-              pimage={comment.pimage} 
-              pname={comment.pname} 
-              plevel={comment.plevel}/>
+
+            <div style={{display:'flex', paddingTop:'10px'}}>
+              <User
+                pid={comment.pid}
+                pimage={comment.pimage} 
+                pname={comment.pname} 
+                plevel={comment.plevel}/>
+
+              <WriteDate>
+                {dateToString2(comment.registDate)}
+              </WriteDate>
+
+              <div style={{margin:'5px 20px'}}>
+                <ReportButton 
+                  user={props.user} 
+                  collection='comment' 
+                  docId={comment.id} />
+              </div>
+            </div>
 
             <Text>
               <Pre>{lineFeedDecoding(comment.content)}</Pre>
@@ -98,6 +114,11 @@ const Text = styled.div`
 const Pre = styled.pre`
   line-height: 150%;
   white-space: pre-wrap;
+`
+const WriteDate = styled.div`
+  font-size: 12px;
+  color: grey;
+  margin: auto 0;
 `
 
 // #f70d1a ferrari red
