@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 
 import { getRecentlyComments, getRecentlyCommentsByKategorie } from 'fb/comment/get';
+import { deleteComment } from 'fb/comment/set';
 
 import Comment from './comment/Comment';
 
@@ -37,11 +38,25 @@ function List(props) {
     init();
   }, [property1])
 
+  async function onDeleteComment(id) {   
+    var array = [];
+
+    for(var i=0; i<props.comments.length; i++) {
+      if(id !== props.comments[i].id) {
+        array.push(props.comments[i]);
+      } 
+    }
+
+    await deleteComment(id);
+    alert('삭제되었습니다.');
+    props.setComments(array); 
+  }
+
   return (
     <Container>
       {loaded && props.comments && props.comments.map((comment) => 
         <Comment key={comment.id} 
-                comment={comment} setVideo={props.setVideo} 
+                comment={comment} onDeleteComment={onDeleteComment} setVideo={props.setVideo} 
                 user={props.user}
         />)
       }

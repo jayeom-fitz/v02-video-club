@@ -4,9 +4,12 @@ import styled from 'styled-components'
 
 import User from 'components/effect/User'
 import ReportButton from 'components/effect/ReportButton'
+
 import { getImageLinkByIdAndPlatform } from 'components/effect/function/func_video'
 import { lineFeedDecoding } from 'components/effect/function/func_str'
 import { dateToString2 } from 'components/effect/function/func_time'
+
+import { ImCross } from 'react-icons/im'
 
 import Buttons from './Buttons';
 import ReplyList from './ReplyList'
@@ -50,6 +53,11 @@ function Comment(props) {
               <WriteDate>
                 {dateToString2(comment.registDate)}
               </WriteDate>
+
+              {props.user && (props.user.uid === comment.pid || props.user.level >= 1) &&
+              <div style={{verticalAlign:'middle', margin:'5px 0 0 10px'}}>
+                <StyledImCross size='12' onClick={() => props.onDeleteComment(comment.id)}/>
+              </div>}
 
               <div style={{margin:'5px 20px'}}>
                 <ReportButton 
@@ -119,6 +127,10 @@ const WriteDate = styled.div`
   font-size: 12px;
   color: grey;
   margin: auto 0;
+`
+const StyledImCross = styled(ImCross)`
+  color: grey;
+  cursor: pointer;
 `
 
 // #f70d1a ferrari red

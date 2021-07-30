@@ -15,6 +15,12 @@ export async function writeCommentPosting(data) {
   return {id, ...data};
 }
 
+// 글 삭제 (active true -> false) 비활성화
+export async function deleteComment(id) {
+  await storeService.collection('comment').doc(id)
+    .update({active : false});
+}
+
 // 추천
 export async function commentRecommend(data, uid) {
   data.ups = await getRecommendCount(data.id) + 1;

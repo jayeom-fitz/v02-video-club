@@ -52,6 +52,7 @@ function Report(props) {
     switch(str) {
       case 'reply' : return '댓글';
       case 'board' : return '게시글';
+      case 'comment' : return '코멘트';
       default : return '';
     }
   }
