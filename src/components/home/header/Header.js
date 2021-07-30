@@ -8,6 +8,7 @@ import Logo from './content/Logo';
 
 import UserIcon from './content/UserIcon';
 import LoginButton from './content/LoginButton';
+import NotificationIcon from './content/NotificationIcon';
 
 function Header(props) {
   return (
@@ -20,8 +21,9 @@ function Header(props) {
           size='24' />
         <Logo />
       </Content>
-      
+
       <Content>
+        {props.user ? <NotificationIcon user={props.user}/> : null}
         {props.user ? <UserIcon user={props.user}/> : <LoginButton />}
       </Content>
     </Container>
